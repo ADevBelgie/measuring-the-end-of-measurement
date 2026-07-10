@@ -94,20 +94,20 @@ const TimelineSimulator = () => {
   ];
 
   return (
-    <div className="glass-panel p-6 sm:p-8 flex flex-col gap-6 glow-indigo">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+    <div className="glass-panel p-6 sm:p-8 flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-line/15 pb-4">
         <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <Sliders className="text-indigo-400" size={20} />
+          <h3 className="text-xl font-bold text-ink flex items-center gap-2">
+            <Sliders className="text-signal" size={20} />
             Epistemic Timeline Simulator
           </h3>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-ink-dim mt-1">
             Adjust the key underlying variables to recalculate the timeline to cognitive supersession.
           </p>
         </div>
         <button
           onClick={() => setShowFormula(!showFormula)}
-          className="flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-semibold border border-indigo-500/20 bg-indigo-500/5 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs text-signal hover:underline font-semibold border border-line/20 bg-panel px-3 py-1.5 rounded-md transition-colors cursor-pointer"
         >
           <Calculator size={14} />
           {showFormula ? 'Hide Formula' : 'View Formula'}
@@ -115,24 +115,24 @@ const TimelineSimulator = () => {
       </div>
 
       {/* Sliders Area */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-950 p-6 rounded-2xl border border-slate-900">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-panel p-6 rounded-lg border border-line/25">
         {/* Slider 1 */}
         <div className="space-y-3">
           <div className="flex justify-between text-xs">
-            <span className="font-semibold text-slate-300 flex items-center gap-1">
+            <span className="font-semibold text-ink flex items-center gap-1">
               METR Doubling Time
               <button
                 type="button"
                 aria-label="What is METR doubling time?"
-                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+                className="group relative cursor-pointer text-ink-faint hover:text-ink focus:text-ink bg-transparent border-none p-0 outline-none inline-flex items-center"
               >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-panel border border-line/30 text-[10px] text-ink-dim p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   How many months it takes for the duration of solvable expert-human tasks to double.
                 </span>
               </button>
             </span>
-            <span className="font-mono font-bold text-indigo-400 bg-indigo-950/40 px-2 py-0.5 rounded border border-indigo-900/30">
+            <span className="font-mono font-bold text-signal bg-signal/10 px-2 py-0.5 rounded border border-signal/25">
               {doublingTime} Months
             </span>
           </div>
@@ -143,9 +143,9 @@ const TimelineSimulator = () => {
             step="0.5"
             value={doublingTime}
             onChange={(e) => setDoublingTime(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+            className="w-full h-1.5 bg-raised rounded-lg appearance-none cursor-pointer accent-[#E8A33D] focus-visible:ring-2 focus-visible:ring-signal focus-visible:outline-none"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+          <div className="flex justify-between text-[10px] text-ink-faint font-mono">
             <span>3m (Aggressive)</span>
             <span>7m (Default)</span>
             <span>12m (Conservative)</span>
@@ -155,20 +155,20 @@ const TimelineSimulator = () => {
         {/* Slider 2 */}
         <div className="space-y-3">
           <div className="flex justify-between text-xs">
-            <span className="font-semibold text-slate-300 flex items-center gap-1">
+            <span className="font-semibold text-ink flex items-center gap-1">
               Average Deployment Lag
               <button
                 type="button"
                 aria-label="What is average deployment lag?"
-                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+                className="group relative cursor-pointer text-ink-faint hover:text-ink focus:text-ink bg-transparent border-none p-0 outline-none inline-flex items-center"
               >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-panel border border-line/30 text-[10px] text-ink-dim p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   How many years it takes for frontier capability to translate into corporate deployment at scale across the economy.
                 </span>
               </button>
             </span>
-            <span className="font-mono font-bold text-violet-400 bg-violet-950/40 px-2 py-0.5 rounded border border-violet-900/30">
+            <span className="font-mono font-bold text-signal bg-signal/10 px-2 py-0.5 rounded border border-signal/25">
               {deploymentLag} Years
             </span>
           </div>
@@ -179,9 +179,9 @@ const TimelineSimulator = () => {
             step="0.5"
             value={deploymentLag}
             onChange={(e) => setDeploymentLag(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-violet-500"
+            className="w-full h-1.5 bg-raised rounded-lg appearance-none cursor-pointer accent-[#E8A33D] focus-visible:ring-2 focus-visible:ring-signal focus-visible:outline-none"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+          <div className="flex justify-between text-[10px] text-ink-faint font-mono">
             <span>0y (Instant)</span>
             <span>2y (Default)</span>
             <span>5y (High Lag)</span>
@@ -191,20 +191,20 @@ const TimelineSimulator = () => {
         {/* Slider 3 */}
         <div className="space-y-3">
           <div className="flex justify-between text-xs">
-            <span className="font-semibold text-slate-300 flex items-center gap-1">
+            <span className="font-semibold text-ink flex items-center gap-1">
               Tail Probability (Silence After 2035)
               <button
                 type="button"
                 aria-label="What is tail probability?"
-                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+                className="group relative cursor-pointer text-ink-faint hover:text-ink focus:text-ink bg-transparent border-none p-0 outline-none inline-flex items-center"
               >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-panel border border-line/30 text-[10px] text-ink-dim p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   Probability that the silence lands after 2035. The brief's stated position is ~30%; "disanalogies fully offset the self-driving reference class" argues ~15%, "driving's residue is the true prior" argues ~45%.
                 </span>
               </button>
             </span>
-            <span className="font-mono font-bold text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-900/30">
+            <span className="font-mono font-bold text-signal bg-signal/10 px-2 py-0.5 rounded border border-signal/25">
               {residueOffset}%
             </span>
           </div>
@@ -215,9 +215,9 @@ const TimelineSimulator = () => {
             step="15"
             value={residueOffset}
             onChange={(e) => setResidueOffset(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+            className="w-full h-1.5 bg-raised rounded-lg appearance-none cursor-pointer accent-[#E8A33D] focus-visible:ring-2 focus-visible:ring-signal focus-visible:outline-none"
           />
-          <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+          <div className="flex justify-between text-[10px] text-ink-faint font-mono">
             <span>15% (Full offset)</span>
             <span>30% (Brief's position)</span>
             <span>45% (Driving prior)</span>
@@ -227,40 +227,40 @@ const TimelineSimulator = () => {
 
       {/* Model Transparency Panel */}
       {showFormula && (
-        <div className="bg-indigo-950/10 border border-indigo-900/30 rounded-2xl p-5 text-xs space-y-3 font-mono animate-fadeIn">
-          <div className="text-white font-bold uppercase tracking-wider flex items-center gap-2 text-[10px] border-b border-indigo-900/30 pb-2">
+        <div className="bg-panel border border-line/25 rounded-lg p-5 text-xs space-y-3 font-mono animate-fadeIn">
+          <div className="text-ink font-bold uppercase tracking-wider flex items-center gap-2 text-[10px] border-b border-line/15 pb-2">
             <Calculator size={14} /> Arithmetic Disclosure (Base Year: mid-2026 / 2026.5)
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-ink-dim leading-relaxed">
             <div className="space-y-1.5">
               <div>
-                <span className="text-indigo-400">Verifiable-domain superhumanity (Frontier):</span><br />
+                <span className="text-signal">Verifiable-domain superhumanity (Frontier):</span><br />
                 <code>Start = 2026.5 + (DT / 12) * 1.0</code><br />
                 <code>End = 2026.5 + (DT / 12) * 4.28</code>
               </div>
               <div>
-                <span className="text-violet-400">Autonomous AI R&D Threshold (Frontier):</span><br />
+                <span className="text-signal">Autonomous AI R&D Threshold (Frontier):</span><br />
                 <code>Target = 2026.5 + (DT / 12) * 2.57</code>
               </div>
               <div>
-                <span className="text-slate-400">Deployed Economic Reality:</span><br />
+                <span className="text-ink-faint">Deployed Economic Reality:</span><br />
                 <code>Deployed Date = Frontier Date + Deployment Lag (applies to stages 1, 3, 4 only)</code>
               </div>
             </div>
             <div className="space-y-1.5">
               <div>
-                <span className="text-amber-400">Year-horizon crossing (Frontier):</span><br />
+                <span className="text-signal">Year-horizon crossing (Frontier):</span><br />
                 <code>Start = 2026.5 + (DT / 12) * 4.28</code><br />
                 <code>End = 2026.5 + (DT / 12) * 9.43</code>
               </div>
               <div>
-                <span className="text-indigo-300">The Silence (Frontier Mode):</span><br />
+                <span className="text-signal">The Silence (Frontier Mode):</span><br />
                 <code>Start = 2026.5 + (DT / 12) * 7.71 + (Residue - 30)/10</code><br />
                 <code>End = 2026.5 + (DT / 12) * 12.85 + (Residue - 30)/10</code>
               </div>
             </div>
           </div>
-          <div className="text-[10px] text-slate-400 border-t border-indigo-900/20 pt-2 leading-relaxed space-y-1">
+          <div className="text-[10px] text-ink-faint border-t border-line/15 pt-2 leading-relaxed space-y-1">
             <p>
               <strong>Regression check:</strong> At default parameters (DT = 7, Lag = 2, Tail = 30%), these formulas reproduce the brief's published table verbatim: ~2027–2029 · ~2028 · ~2029–2032 · ~2029–2031 · mode 2031–2034 with ~30% beyond 2035. If the numbers you see at defaults differ from these, the simulator has a bug — please report it.
             </p>
@@ -279,40 +279,40 @@ const TimelineSimulator = () => {
           return (
             <div 
               key={idx} 
-              className="bg-slate-900/30 border border-slate-900 hover:border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-all"
+              className="bg-panel border border-line/20 hover:border-line/45 rounded-lg p-4 sm:p-5 flex flex-col gap-3 transition-all"
             >
               <div className="space-y-1.5">
-                <h4 className="font-bold text-white text-sm sm:text-base">{stage.name}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">{stage.desc}</p>
-                <div className="text-[10px] text-slate-500 font-semibold">{stage.driver}</div>
+                <h4 className="font-bold text-ink text-sm sm:text-base">{stage.name}</h4>
+                <p className="text-xs text-ink-dim leading-relaxed">{stage.desc}</p>
+                <div className="text-[10px] text-ink-faint font-semibold">{stage.driver}</div>
               </div>
               
               {/* Split Estimates: Frontier Capability vs Deployed Economic Reality */}
-              <div className="border-t border-slate-900 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="border-t border-line/20 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-indigo-400 font-bold mb-0.5">Frontier Capability</div>
-                  <div className="text-base font-black text-indigo-300 font-mono leading-snug">
+                  <div className="text-[10px] uppercase tracking-wider text-ink-faint font-bold mb-0.5">Frontier Capability</div>
+                  <div className="text-base font-bold text-ink font-mono leading-snug">
                     {stage.calculatedFrontier}
                   </div>
                   {isShifted && (
-                    <div className="text-[9px] text-slate-500 font-mono mt-0.5">
+                    <div className="text-[9px] text-ink-faint font-mono mt-0.5">
                       Baseline: {stage.original}
                     </div>
                   )}
                 </div>
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-violet-400 font-bold mb-0.5">Deployed Economic Reality</div>
-                  <div className="text-base font-black text-violet-300 font-mono leading-snug">
+                  <div className="text-[10px] uppercase tracking-wider text-ink-faint font-bold mb-0.5">Deployed Economic Reality</div>
+                  <div className="text-base font-bold text-ink-dim font-mono leading-snug">
                     {stage.hasDeployedCounterpart ? stage.calculatedDeployed : 'n/a'}
                   </div>
                   {stage.hasDeployedCounterpart ? (
                     isShifted && (
-                      <div className="text-[9px] text-slate-500 font-mono mt-0.5">
+                      <div className="text-[9px] text-ink-faint font-mono mt-0.5">
                         Baseline (+2y): {stage.originalDeployed}
                       </div>
                     )
                   ) : (
-                    <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                    <div className="text-[10px] text-ink-faint font-semibold mt-0.5">
                       {stage.deployedReason}
                     </div>
                   )}

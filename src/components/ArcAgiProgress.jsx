@@ -7,13 +7,12 @@ import {
 
 // ── Colors ────────────────────────────────────────────────────────
 const COLORS = {
-  arc1: '#6366f1',  // indigo
-  arc2: '#a78bfa',  // violet
-  arc3: '#fbbf24',  // amber
+  arc1: '#6E8FB0',  // historical solved
+  arc2: '#A9C4DE',  // recent past
+  arc3: '#E8A33D',  // live frontier (signal)
 };
 
 // ── Strict Linear Timeline Data ───────────────────────────────────
-// Using exact decimal years as the X values to maintain a strictly linear time axis.
 const ARC1_DATA = [
   { year: 2020.0, pct: 0,    labelVal: '0%',   labelName: 'GPT-3',           align: 'middle', dy: -12, dx: 0 },
   { year: 2024.5, pct: 5,    labelVal: '5%',   labelName: 'GPT-4o',          align: 'middle', dy: -12, dx: 0 },
@@ -37,7 +36,6 @@ const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;
   const point = payload[0]?.payload;
   
-  // Format decimal year back to readable date
   const formatTooltipYear = (yr) => {
     if (yr === 2020.0) return '2020 (GPT-3)';
     if (yr === 2024.5) return 'Mid-2024 (GPT-4o)';
@@ -51,15 +49,15 @@ const CustomTooltip = ({ active, payload }) => {
   };
 
   return (
-    <div className="bg-slate-900/95 border border-slate-700 rounded-lg px-3 py-2 shadow-xl text-xs font-sans">
-      <div className="text-slate-500 text-[10px] mb-1 font-semibold uppercase tracking-wider">
+    <div className="bg-panel border border-line/30 rounded-lg px-3 py-2 shadow-xl text-xs font-sans">
+      <div className="text-ink-faint text-[10px] mb-1 font-semibold uppercase tracking-wider font-mono">
         {formatTooltipYear(point?.year)}
       </div>
       {payload.map((entry, i) => (
-        <div key={i} className="flex items-center gap-2 py-0.5">
-          <span className="h-2 w-2 rounded-full" style={{ background: entry.color }} />
-          <span className="text-slate-300 font-medium">{entry.name}:</span>
-          <span className="text-white font-bold">{entry.value}%</span>
+        <div key={i} className="flex items-center gap-2 py-0.5 font-mono">
+          <span className="h-2 w-2 rounded" style={{ background: entry.color }} />
+          <span className="text-ink-dim font-medium">{entry.name}:</span>
+          <span className="text-ink font-bold">{entry.value}%</span>
         </div>
       ))}
     </div>
@@ -76,17 +74,17 @@ const makeDot = (color) => (props) => {
   const dx = payload.dx ?? 0;
 
   return (
-    <g className="font-sans">
+    <g className="font-mono">
       <circle cx={cx} cy={cy} r={5} fill={color} fillOpacity={0.2} />
       <circle cx={cx} cy={cy} r={3.5} fill={color} />
       {payload.labelVal && (
         <g>
-          {/* Label Background for readability */}
+          {/* Label Background for readability - styled with ground color */}
           <text
             x={cx + dx} y={cy + dy}
             textAnchor={align}
-            fill="#090d16"
-            stroke="#090d16"
+            fill="#0B2239"
+            stroke="#0B2239"
             strokeWidth={4}
             fontSize={10}
             fontWeight={700}
@@ -98,7 +96,7 @@ const makeDot = (color) => (props) => {
           <text
             x={cx + dx} y={cy + dy}
             textAnchor={align}
-            fill="#f8fafc"
+            fill="#F2F6FA"
             fontSize={10}
             fontWeight={600}
             className="select-none pointer-events-none"
@@ -126,58 +124,52 @@ const ArcAgiProgress = () => {
   const showArc3 = activeTab === 'all' || activeTab === 'arc3';
 
   return (
-    <div className="glass-panel p-6 sm:p-8 flex flex-col gap-6 glow-indigo">
+    <div className="glass-panel p-6 sm:p-8 flex flex-col gap-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-line/15 pb-4">
         <div>
-          <h3 className="text-xl font-bold text-white font-sans flex items-center gap-2">
-            <Activity className="text-indigo-400" size={20} />
+          <h3 className="text-xl font-bold text-ink font-sans flex items-center gap-2">
+            <Activity className="text-signal" size={20} />
             The ARC-AGI Cascade: Plateau & Collapse
           </h3>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-ink-dim mt-1">
             Visualizing the non-linear decay of abstraction benchmarks. Note the four-year plateau of ARC-1 followed by its sudden collapse.
           </p>
         </div>
-        <div className="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 self-stretch sm:self-auto text-xs shrink-0 font-sans">
+        <div className="flex gap-1 bg-panel p-1 rounded-lg border border-line/20 self-stretch sm:self-auto text-xs shrink-0 font-mono">
           <button onClick={() => setActiveTab('all')}
-            className={`px-3 py-1.5 rounded-md font-medium transition-colors ${activeTab === 'all' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white border border-transparent'}`}
+            className={`px-3 py-1.5 rounded-md font-medium transition-colors cursor-pointer border ${activeTab === 'all' ? 'bg-signal/15 text-signal border-signal/40' : 'text-ink-dim hover:text-ink hover:bg-raised border-transparent'}`}
           >All Series</button>
           {seriesInfo.map(s => (
             <button key={s.id} onClick={() => setActiveTab(s.id)}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${activeTab === s.id ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white border border-transparent'}`}
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors cursor-pointer border ${activeTab === s.id ? 'bg-signal/15 text-signal border-signal/40' : 'text-ink-dim hover:text-ink hover:bg-raised border-transparent'}`}
             >ARC-{s.id.slice(-1)}</button>
           ))}
         </div>
       </div>
 
-      {/* Chart Layout: Stretched to full-width of the panel */}
-      <div className="w-full bg-slate-950 border border-slate-900 rounded-xl p-2 sm:p-4">
+      {/* Chart Layout */}
+      <div className="w-full bg-ground border border-grid/60 rounded-lg p-2 sm:p-4 grid-paper">
         <ResponsiveContainer width="100%" height={380}>
-          {/* 
-            Margining details: 
-            Left side: YAxis is width 40, left margin is 10. Total spacing on left = 50px.
-            Right side: right margin is 50. Total spacing on right = 50px.
-            This ensures the grid area is perfectly centered inside the dark panel.
-          */}
           <LineChart margin={{ top: 25, right: 50, bottom: 5, left: 10 }}>
-            <CartesianGrid stroke="#1e293b" strokeDasharray="4 4" />
+            <CartesianGrid stroke="#2A4A6B" />
             <XAxis
               dataKey="year"
               type="number"
               domain={[2019.8, 2026.7]}
               ticks={[2020, 2021, 2022, 2023, 2024, 2025, 2026]}
               tickFormatter={(tick) => String(tick)}
-              tick={{ fill: '#64748b', fontSize: 11 }}
-              axisLine={{ stroke: '#334155' }}
-              tickLine={{ stroke: '#334155' }}
+              tick={{ fill: '#7A94AC', fontSize: 11, fontFamily: 'IBM Plex Mono' }}
+              axisLine={{ stroke: '#2A4A6B' }}
+              tickLine={{ stroke: '#2A4A6B' }}
             />
             <YAxis
               domain={[0, 105]}
               ticks={[0, 20, 40, 60, 80, 100]}
               tickFormatter={(v) => v <= 100 ? `${v}%` : ''}
-              tick={{ fill: '#64748b', fontSize: 11 }}
-              axisLine={{ stroke: '#334155' }}
-              tickLine={{ stroke: '#334155' }}
+              tick={{ fill: '#7A94AC', fontSize: 11, fontFamily: 'IBM Plex Mono' }}
+              axisLine={{ stroke: '#2A4A6B' }}
+              tickLine={{ stroke: '#2A4A6B' }}
               width={40}
             />
             <Tooltip content={<CustomTooltip />} />
@@ -185,7 +177,7 @@ const ArcAgiProgress = () => {
             {showArc1 && (
               <Line
                 data={ARC1_DATA} dataKey="pct" name="ARC-AGI-1" type="linear"
-                stroke={COLORS.arc1} strokeWidth={2.5}
+                stroke={COLORS.arc1} strokeWidth={2.0}
                 dot={makeDot(COLORS.arc1)}
                 activeDot={{ r: 7, fill: COLORS.arc1 }}
                 isAnimationActive={true}
@@ -213,29 +205,29 @@ const ArcAgiProgress = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Details layout: Three columns side-by-side below the chart */}
+      {/* Details layout */}
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {seriesInfo.map(s => {
             const isActive = activeTab === 'all' || activeTab === s.id;
             return (
               <div key={s.id}
-                className={`p-4 rounded-xl border transition-all duration-300 ${isActive ? 'bg-slate-900/40 border-slate-800' : 'opacity-40 border-transparent bg-transparent'}`}
+                className={`p-4 rounded-lg border transition-all duration-300 ${isActive ? 'bg-panel border-line/20' : 'opacity-40 border-transparent bg-transparent'}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[s.id] }} />
-                  <h4 className="font-semibold text-white text-sm">{s.name}</h4>
+                  <h4 className="font-semibold text-ink text-sm font-sans">{s.name}</h4>
                 </div>
-                <p className="text-xs text-slate-400 mt-2 leading-relaxed">{s.description}</p>
+                <p className="text-xs text-ink-dim mt-2 leading-relaxed font-sans">{s.description}</p>
               </div>
             );
           })}
         </div>
 
-        <div className="bg-amber-950/20 border border-amber-900/30 rounded-xl p-4 text-xs flex gap-3 text-amber-300 leading-relaxed">
-          <Info size={24} className="shrink-0 text-amber-400 mt-0.5" />
+        <div className="bg-panel border border-signal/30 rounded-lg p-4 text-xs flex gap-3 text-ink-dim leading-relaxed">
+          <Info size={24} className="shrink-0 text-signal mt-0.5" />
           <div>
-            <span className="font-semibold block text-amber-200">The Abstraction Recipe:</span>
+            <span className="font-semibold block text-signal font-sans">The Abstraction Recipe:</span>
             ARC Prize releases new editions strictly designed to break existing scaling trends. ARC-3's GPT-5.6 Sol mark (7.8% verified) shows critical first movement, but the true test is whether this marks the start of a linear climb or the precursor to another paradigm-unlocking collapse.
           </div>
         </div>

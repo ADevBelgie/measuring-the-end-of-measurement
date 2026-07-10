@@ -6,8 +6,20 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        ground: '#0B2239',
+        panel: '#0E2A47',
+        raised: '#123152',
+        line: '#B8CBDD',
+        grid: '#2A4A6B',
+        ink: '#F2F6FA',
+        'ink-dim': '#A9BFD4',
+        'ink-faint': '#7A94AC',
+        signal: '#E8A33D',
+      },
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Barlow', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'monospace'],
       },
       animation: {
         'fadeIn': 'fadeIn 0.5s ease-out forwards',
