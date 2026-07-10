@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { 
   Brain, Activity, TrendingUp, Ruler, Sliders, Calendar, 
   ShieldAlert, FileText, CheckCircle,
   BookOpen, Sparkles, RefreshCw, ChevronDown
 } from 'lucide-react';
-import ArcAgiProgress from './components/ArcAgiProgress';
-import SWEBenchRulers from './components/SWEBenchRulers';
 import TimelineSimulator from './components/TimelineSimulator';
+
+const ArcAgiProgress = lazy(() => import('./components/ArcAgiProgress'));
+const SWEBenchRulers = lazy(() => import('./components/SWEBenchRulers'));
 
 function App() {
   // Derive reading mode from URL hash; default to 'expert'
@@ -197,7 +198,7 @@ function App() {
               </p>
             ) : (
               <p className="text-indigo-300 font-medium">
-                Takeaway: Parity is signaled by a "silence" — when we can no longer construct tasks that are easy for humans but difficult for frontier AI systems.
+                Takeaway: The endpoint is signaled by a 'silence' — when no one can still construct tasks that are easy for humans but hard for frontier AI. This is a proxy for supersession, not a definition of it.
               </p>
             )}
             <p>
@@ -249,7 +250,9 @@ function App() {
           </div>
 
           {/* ARC Cascade Visualizer */}
-          <ArcAgiProgress />
+          <Suspense fallback={<div className="h-[380px] bg-slate-950 border border-slate-900 rounded-xl flex items-center justify-center text-slate-500 text-xs">Loading visualization...</div>}>
+            <ArcAgiProgress />
+          </Suspense>
 
           <div className="prose-custom text-slate-300 space-y-4 pt-2">
             {readingMode === 'expert' ? (
@@ -261,7 +264,7 @@ function App() {
                   The terminal condition follows: <strong>the criterion for supersession is the failure of benchmark creation itself</strong> — a standing, well-funded bounty for constructing any discriminating human-easy/AI-hard task, with the silence declared when the bounty goes unclaimed.
                 </p>
                 <blockquote className="border-l-2 border-indigo-500/50 pl-4 py-1 italic bg-indigo-500/5 text-slate-300 rounded-r-md">
-                  "Two honest limits of the silence criterion: First, it measures the exhaustion of one direction of gap (parity with human task-design ingenuity) rather than supersession across all cognition. Second, it has an observability confound (benchmark creation can cease for sociological or financial reasons rather than capability)."
+                  Two honest limits of the silence criterion: First, it measures the exhaustion of one direction of gap (parity with human task-design ingenuity) rather than supersession across all cognition. Second, it has an observability confound (benchmark creation can cease for sociological or financial reasons rather than capability).
                 </blockquote>
               </>
             ) : (
@@ -272,7 +275,9 @@ function App() {
           </div>
 
           {/* SWE-bench Multi-Ruler visualizer */}
-          <SWEBenchRulers />
+          <Suspense fallback={<div className="h-[300px] bg-slate-950 border border-slate-900 rounded-xl flex items-center justify-center text-slate-500 text-xs">Loading rulers...</div>}>
+            <SWEBenchRulers />
+          </Suspense>
         </section>
 
         {/* SECTION 2: TASK TIME-HORIZONS */}
@@ -427,7 +432,7 @@ function App() {
                 <tr className="hover:bg-slate-900/20">
                   <td className="p-4 font-bold text-white">The Silence</td>
                   <td className="p-4 text-amber-400 font-bold font-mono">Mode 2031–2034</td>
-                  <td className="p-4 text-slate-305 leading-relaxed">
+                  <td className="p-4 text-slate-300 leading-relaxed">
                     {readingMode === 'brief' 
                       ? "Nobody, however well funded, can still design a task that's easy for humans and hard for AI. ~30% chance this lands after 2035." 
                       : 'No well-funded designer can construct any remaining human-easy/AI-hard task. 10% by 2029; mode 2031-2034 (~55-60%); beyond 2035: ~30%, tailing into the 2040s.'}
@@ -585,7 +590,7 @@ function App() {
 
       {/* FOOTER */}
       <footer className="border-t border-slate-900 py-8 bg-slate-950 text-center text-xs text-slate-600">
-        <p>© 2026 Briefing Synthesis. Prepared by Arthur Devresse et al.</p>
+        <p>© 2026 Briefing Synthesis. Synthesis with participation of Arthur Devresse; see authorship disclosure above.</p>
         <p className="mt-1.5 text-[10px]">Evaluating the meta-metrics of cognitive capability and deployment lag.</p>
       </footer>
 

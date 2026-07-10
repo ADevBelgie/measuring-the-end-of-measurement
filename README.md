@@ -1,16 +1,24 @@
-# React + Vite
+# Measuring the End of Measurement
+### Benchmark half-life, task horizons, and the timeline to cognitive supersession
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+An interactive briefing dashboard built with React, Tailwind CSS, and Recharts. This website synthesizes the July 2026 strategic briefing of the same title, exploring the meta-metrics of cognitive capability and deployment lag.
 
-Currently, two official plugins are available:
+## Project Structure
+- `measuring-the-end-of-measurement.md` - The source document detailing the briefing.
+- `src/App.jsx` - The main dashboard controller and page structure.
+- `src/components/ArcAgiProgress.jsx` - The ARC-AGI Plateau & Collapse line chart visualization using Recharts.
+- `src/components/SWEBenchRulers.jsx` - The SWE-bench Pro Multi-Ruler signal decay chart using Recharts.
+- `src/components/TimelineSimulator.jsx` - The Epistemic Timeline Simulator demonstrating the gap between frontier capability and deployed economic reality.
+- `src/index.css` - Custom styling declarations, transition overrides, and reduced-motion settings.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Getting Started
+To run the project locally in development mode:
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+To build the project for production:
+```bash
+npm run build
+```

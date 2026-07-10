@@ -50,16 +50,17 @@ const TimelineSimulator = () => {
       calculatedDeployed: `~${formatYear(vStart + deploymentLag)}–${formatYear(vEnd + deploymentLag)}`,
       original: '~2027–2029',
       originalDeployed: '~2029–2031',
-      driver: 'Driven by RL on verifiable rewards (e.g., math and coding domains).'
+      driver: 'Driven by RL on verifiable rewards (e.g., math and coding domains).',
+      hasDeployedCounterpart: true
     },
     {
       name: 'Autonomous AI research threshold',
       desc: 'AI contribution to AI R&D crosses from acceleration (~tens of %) to running the autonomous self-improvement loop.',
       calculatedFrontier: `Watch by ~${formatYear(autoResearch)}`,
-      calculatedDeployed: `Watch by ~${formatYear(autoResearch + deploymentLag)}`,
       original: 'Watch by ~2028',
-      originalDeployed: 'Watch by ~2030',
-      driver: 'The critical inflection point where capability scaling enters a recursive feedback loop.'
+      driver: 'The critical inflection point where capability scaling enters a recursive feedback loop.',
+      hasDeployedCounterpart: false,
+      deployedReason: 'lab-internal event — no deployed counterpart'
     },
     {
       name: 'Year-horizon crossing',
@@ -68,7 +69,8 @@ const TimelineSimulator = () => {
       calculatedDeployed: `~${formatYear(yStart + deploymentLag)}–${formatYear(yEnd + deploymentLag)}`,
       original: '~2029–2032',
       originalDeployed: '~2031–2034',
-      driver: 'Requires multi-step planning and error mitigation over long context spans.'
+      driver: 'Requires multi-step planning and error mitigation over long context spans.',
+      hasDeployedCounterpart: true
     },
     {
       name: 'Most economically relevant cognition',
@@ -77,16 +79,17 @@ const TimelineSimulator = () => {
       calculatedDeployed: `~${formatYear(econStart + deploymentLag)}–${formatYear(econEnd + deploymentLag)}`,
       original: '~2029–2031',
       originalDeployed: '~2031–2033',
-      driver: 'Staggered by deployment lag, corporate adoption speed, and verification-resistant remainder tasks.'
+      driver: 'Staggered by deployment lag, corporate adoption speed, and verification-resistant remainder tasks.',
+      hasDeployedCounterpart: true
     },
     {
       name: 'The silence (existential boundary)',
       desc: 'No well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard task.',
       calculatedFrontier: `Mode ~${formatYear(silenceStart)}–${formatYear(silenceEnd)} (${tailProbability}% tail beyond 2035, tailing into the ${tailEndDecade})`,
-      calculatedDeployed: `Mode ~${formatYear(silenceStart + deploymentLag)}–${formatYear(silenceEnd + deploymentLag)} (${tailProbability}% tail beyond 2035, tailing into the ${tailEndDecade})`,
       original: 'Mode 2031–2034',
-      originalDeployed: 'Mode 2033–2036',
-      driver: 'Terminal condition: bounty for any discriminating task goes unclaimed.'
+      driver: 'Terminal condition: bounty for any discriminating task goes unclaimed.',
+      hasDeployedCounterpart: false,
+      deployedReason: 'benchmark-design event — no deployed counterpart'
     }
   ];
 
@@ -118,12 +121,16 @@ const TimelineSimulator = () => {
           <div className="flex justify-between text-xs">
             <span className="font-semibold text-slate-300 flex items-center gap-1">
               METR Doubling Time
-              <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
+              <button
+                type="button"
+                aria-label="What is METR doubling time?"
+                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+              >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   How many months it takes for the duration of solvable expert-human tasks to double.
                 </span>
-              </span>
+              </button>
             </span>
             <span className="font-mono font-bold text-indigo-400 bg-indigo-950/40 px-2 py-0.5 rounded border border-indigo-900/30">
               {doublingTime} Months
@@ -150,12 +157,16 @@ const TimelineSimulator = () => {
           <div className="flex justify-between text-xs">
             <span className="font-semibold text-slate-300 flex items-center gap-1">
               Average Deployment Lag
-              <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
+              <button
+                type="button"
+                aria-label="What is average deployment lag?"
+                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+              >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   How many years it takes for frontier capability to translate into corporate deployment at scale across the economy.
                 </span>
-              </span>
+              </button>
             </span>
             <span className="font-mono font-bold text-violet-400 bg-violet-950/40 px-2 py-0.5 rounded border border-violet-900/30">
               {deploymentLag} Years
@@ -182,12 +193,16 @@ const TimelineSimulator = () => {
           <div className="flex justify-between text-xs">
             <span className="font-semibold text-slate-300 flex items-center gap-1">
               Tail Probability (Silence After 2035)
-              <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
+              <button
+                type="button"
+                aria-label="What is tail probability?"
+                className="group relative cursor-pointer text-slate-500 hover:text-slate-300 focus:text-slate-300 bg-transparent border-none p-0 outline-none inline-flex items-center"
+              >
                 <HelpCircle size={12} />
-                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
+                <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
                   Probability that the silence lands after 2035. The brief's stated position is ~30%; "disanalogies fully offset the self-driving reference class" argues ~15%, "driving's residue is the true prior" argues ~45%.
                 </span>
-              </span>
+              </button>
             </span>
             <span className="font-mono font-bold text-amber-400 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-900/30">
               {residueOffset}%
@@ -229,7 +244,7 @@ const TimelineSimulator = () => {
               </div>
               <div>
                 <span className="text-slate-400">Deployed Economic Reality:</span><br />
-                <code>Deployed Date = Frontier Date + Deployment Lag</code>
+                <code>Deployed Date = Frontier Date + Deployment Lag (applies to stages 1, 3, 4 only)</code>
               </div>
             </div>
             <div className="space-y-1.5">
@@ -245,8 +260,13 @@ const TimelineSimulator = () => {
               </div>
             </div>
           </div>
-          <div className="text-[10px] text-slate-400 border-t border-indigo-900/20 pt-2 leading-relaxed">
-            <strong>Regression check:</strong> At default parameters (DT = 7, Lag = 2, Tail = 30%), these formulas reproduce the brief's published table verbatim: ~2027–2029 · ~2028 · ~2029–2032 · ~2029–2031 · mode 2031–2034 with ~30% beyond 2035. If the numbers you see at defaults differ from these, the simulator has a bug — please report it.
+          <div className="text-[10px] text-slate-400 border-t border-indigo-900/20 pt-2 leading-relaxed space-y-1">
+            <p>
+              <strong>Regression check:</strong> At default parameters (DT = 7, Lag = 2, Tail = 30%), these formulas reproduce the brief's published table verbatim: ~2027–2029 · ~2028 · ~2029–2032 · ~2029–2031 · mode 2031–2034 with ~30% beyond 2035. If the numbers you see at defaults differ from these, the simulator has a bug — please report it.
+            </p>
+            <p>
+              Tail probability is modeled as a crude linear mode shift of &plusmn;1.5 years around the 30% baseline; the underlying distribution is not reshaped.
+            </p>
           </div>
         </div>
       )}
@@ -283,11 +303,17 @@ const TimelineSimulator = () => {
                 <div>
                   <div className="text-[10px] uppercase tracking-wider text-violet-400 font-bold mb-0.5">Deployed Economic Reality</div>
                   <div className="text-base font-black text-violet-300 font-mono leading-snug">
-                    {stage.calculatedDeployed}
+                    {stage.hasDeployedCounterpart ? stage.calculatedDeployed : 'n/a'}
                   </div>
-                  {isShifted && (
-                    <div className="text-[9px] text-slate-500 font-mono mt-0.5">
-                      Baseline (+2y): {stage.originalDeployed}
+                  {stage.hasDeployedCounterpart ? (
+                    isShifted && (
+                      <div className="text-[9px] text-slate-500 font-mono mt-0.5">
+                        Baseline (+2y): {stage.originalDeployed}
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                      {stage.deployedReason}
                     </div>
                   )}
                 </div>

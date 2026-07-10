@@ -159,7 +159,7 @@ const SWEBenchRulers = () => {
           <div className="text-[10px] text-slate-400 leading-relaxed bg-indigo-950/20 border border-indigo-900/35 rounded-lg p-2.5 flex items-start gap-2">
             <Sparkles size={14} className="shrink-0 text-indigo-400 mt-0.5" />
             <span>
-              <strong>Ten-Week Velocity:</strong> Standardized top score climbed 13.2 percentage points in roughly 70 days. Extrapolating this direct velocity yields full saturation before the end of the year.
+              <strong>Ten-Week Velocity:</strong> Standardized top score climbed 13.2 percentage points in roughly 70 days — though the brief's own thesis warns benchmark decay is punctuated, not linear, so this velocity should not be extrapolated.
             </span>
           </div>
         </div>
@@ -194,7 +194,7 @@ const SWEBenchRulers = () => {
       <div className="bg-slate-950 border border-slate-900 rounded-xl p-4 text-xs text-slate-400 leading-relaxed flex gap-3">
         <ShieldAlert size={20} className="shrink-0 text-amber-500 mt-0.5" />
         <span>
-          <strong>Why this happens:</strong> As benchmarks near saturation, vendors apply increasingly heavy engineering scaffolds (long-horizon search, self-correction loops, agentic wrappers) to squeeze out the final points. This introduces massive variance in evaluations. When the gap between "standardized baseline" and "builder claim" exceeds 20%, the benchmark is no longer measuring model capability alone; it is measuring the scaffolding complexity, leading to signal decay.
+          <strong>Why this happens:</strong> As benchmarks near saturation, vendors apply increasingly heavy engineering scaffolds (long-horizon search, self-correction loops, agentic wrappers) to squeeze out the final points. This introduces massive variance in evaluations. As the gap between standardized baseline and builder claim widens, the benchmark increasingly measures scaffolding complexity rather than model capability alone.
         </span>
       </div>
     </div>

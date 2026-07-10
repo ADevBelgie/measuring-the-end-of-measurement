@@ -106,6 +106,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0s !important;
     scroll-behavior: auto !important;
-    transform: none !important;
   }
 }
