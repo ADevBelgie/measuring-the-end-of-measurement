@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Brain, Activity, TrendingUp, Ruler, Sliders, Calendar, 
-  ShieldAlert, FileText, CheckCircle, ExternalLink, AlertTriangle,
+  ShieldAlert, FileText, CheckCircle,
   BookOpen, Sparkles, RefreshCw, AlertCircle
 } from 'lucide-react';
 import ArcAgiProgress from './components/ArcAgiProgress';

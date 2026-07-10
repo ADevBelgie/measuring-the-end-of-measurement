@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sliders, HelpCircle, ChevronDown, ChevronUp, Calculator } from 'lucide-react';
+import { Sliders, HelpCircle, Calculator } from 'lucide-react';
 
 const TimelineSimulator = () => {
   // Simulator inputs
