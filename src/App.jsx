@@ -2,61 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { 
   Brain, Activity, TrendingUp, Ruler, Sliders, Calendar, 
   ShieldAlert, FileText, CheckCircle,
-  BookOpen, Sparkles, RefreshCw, AlertCircle
+  BookOpen, Sparkles, RefreshCw, ChevronDown
 } from 'lucide-react';
 import ArcAgiProgress from './components/ArcAgiProgress';
 import SWEBenchRulers from './components/SWEBenchRulers';
 import TimelineSimulator from './components/TimelineSimulator';
 
 function App() {
-  const [readingMode, setReadingMode] = useState('expert'); // 'brief' or 'expert'
-  const [daysElapsed, setDaysElapsed] = useState(0);
-  const [decayPercent, setDecayPercent] = useState(0.0);
-  const [rotLevel, setRotLevel] = useState('fresh'); // 'fresh', 'stale', 'rotten'
+  // Derive reading mode from URL hash; default to 'expert'
+  const getInitialMode = () => {
+    const hash = window.location.hash.replace('#', '');
+    return hash === 'brief' ? 'brief' : 'expert';
+  };
+  const [readingMode, setReadingMode] = useState(getInitialMode);
+  const [disclosureOpen, setDisclosureOpen] = useState(false);
 
-  // Calculate dynamic data rot based on July 10, 2026
+  // Sync reading mode to/from URL hash so links can be shared
   useEffect(() => {
-    const reportDate = new Date('2026-07-10T20:48:18');
-    const currentDate = new Date();
-    
-    // Calculate difference in days
-    const diffTime = currentDate - reportDate;
-    const diffDays = Math.max(0, Math.floor(diffTime / (1000 * 60 * 60 * 24)));
-    setDaysElapsed(diffDays);
-
-    // Half life of 240 days (8 months)
-    const decay = (diffDays / 240) * 100;
-    setDecayPercent(decay.toFixed(1));
-
-    if (decay < 15) {
-      setRotLevel('fresh');
-    } else if (decay < 50) {
-      setRotLevel('stale');
-    } else {
-      setRotLevel('rotten');
-    }
+    const onHashChange = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'brief' || hash === 'expert') setReadingMode(hash);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  const handleSetMode = (mode) => {
+    setReadingMode(mode);
+    window.location.hash = mode;
+  };
 
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-300">
-      
-      {/* ─── DYNAMIC DECAYING DATE BANNER ─── */}
-      <div className={`w-full py-2.5 px-4 text-xs font-semibold text-center border-b flex justify-center items-center gap-2 select-none transition-colors duration-500 ${
-        rotLevel === 'fresh' 
-          ? 'bg-emerald-950/60 border-emerald-800/40 text-emerald-300' 
-          : rotLevel === 'stale'
-            ? 'bg-amber-950/60 border-amber-800/40 text-amber-300'
-            : 'bg-rose-950/70 border-rose-800/50 text-rose-300 animate-pulse'
-      }`}>
-        <AlertCircle size={14} className="shrink-0" />
-        <span>
-          Data as of July 10, 2026 ({daysElapsed} days elapsed). 
-          Signal is {Math.max(0, 100 - decayPercent).toFixed(1)}% fresh. 
-          {rotLevel === 'fresh' && ' ⏱️ Baseline signal remains valid.'}
-          {rotLevel === 'stale' && ' ⚠️ Alert: Benchmark half-life decay has begun.'}
-          {rotLevel === 'rotten' && ' 🚨 Warning: Half-life saturated. High signal rot risk! Re-verify sources.'}
-        </span>
-      </div>
 
       {/* ─── STICKY HEADER ─── */}
       <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50 transition-colors">
@@ -68,7 +45,7 @@ function App() {
             <div>
               <h1 className="text-base sm:text-lg font-black text-white tracking-tight">Measuring the End of Measurement</h1>
               <div className="hidden sm:flex gap-2 text-[9px] text-slate-500 font-bold uppercase tracking-wider">
-                <span>Strategic Synthesis</span>
+                <span>Synthesis</span>
                 <span>•</span>
                 <span className="text-indigo-400">July 2026 Briefing</span>
               </div>
@@ -79,7 +56,7 @@ function App() {
             <span className="text-xs text-slate-400 font-medium hidden md:inline">Reading Mode:</span>
             <div className="flex bg-slate-900 border border-slate-800 p-0.5 rounded-lg text-xs">
               <button 
-                onClick={() => setReadingMode('brief')}
+                onClick={() => handleSetMode('brief')}
                 className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 ${
                   readingMode === 'brief' 
                     ? 'bg-indigo-500 text-white shadow-md' 
@@ -90,7 +67,7 @@ function App() {
                 Brief
               </button>
               <button 
-                onClick={() => setReadingMode('expert')}
+                onClick={() => handleSetMode('expert')}
                 className={`px-3 py-1.5 rounded-md font-semibold transition-colors flex items-center gap-1.5 ${
                   readingMode === 'expert' 
                     ? 'bg-indigo-500 text-white shadow-md' 
@@ -151,22 +128,30 @@ function App() {
           </div>
 
           {/* Disclosure and Status Panel (MUST persist in both modes) */}
-          <div className="bg-slate-900/40 border border-slate-850 rounded-2xl p-5 text-xs text-slate-400 space-y-3 leading-relaxed text-left">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-850 pb-2.5">
+          <div className="bg-slate-900/40 border border-slate-850 rounded-2xl text-xs text-slate-400 leading-relaxed text-left overflow-hidden">
+            <button
+              onClick={() => setDisclosureOpen(o => !o)}
+              className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 hover:bg-slate-900/30 transition-colors"
+            >
               <span className="font-bold text-white uppercase tracking-wider text-[10px] flex items-center gap-1.5">
                 <ShieldAlert size={14} className="text-indigo-400" />
-                Authorship Disclosure & Status Note
+                Authorship Disclosure &amp; Status Note
               </span>
-              <span className="text-[10px] font-semibold text-indigo-400/80 bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10">
-                July 2026
-              </span>
-            </div>
-            <p>
-              <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 strategic brief that supplied this document's seed hypothesis (the benchmark half-life). Citations of that brief are therefore self-citation; the mid-2026 verification of its claims was performed against independent sources (Scale AI, ARC Prize Foundation, Forrester, Gartner, Stanford, and others) and does not route through the brief or its authors.
-            </p>
-            <p className="border-t border-slate-850 pt-2.5 italic">
-              <strong>Status:</strong> Informal synthesis. Point estimates are held loosely and are most useful as a structure for updating, not as forecasts to be quoted. Prose is deliberately compressed; if this document is ever promoted beyond informal synthesis, unpacking is the first job.
-            </p>
+              <ChevronDown
+                size={15}
+                className={`text-slate-500 transition-transform duration-200 ${disclosureOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            {disclosureOpen && (
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3 border-t border-slate-850 pt-3">
+                <p>
+                  <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 brief that supplied this document's seed hypothesis (the benchmark half-life). Citations of that brief are therefore self-citation; the mid-2026 verification of its claims was performed against independent sources (Scale AI, ARC Prize Foundation, Forrester, Gartner, Stanford, and others) and does not route through the brief or its authors.
+                </p>
+                <p className="italic">
+                  <strong>Status:</strong> Informal synthesis. Point estimates are held loosely and are most useful as a structure for updating, not as forecasts to be quoted. Prose is deliberately compressed; if this document is ever promoted beyond informal synthesis, unpacking is the first job.
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -521,12 +506,12 @@ function App() {
             Sources & References
           </h4>
           <p>
-            <strong>Devresse, A., et al.</strong>, <em>The AI Revolution: 2026 Strategic Brief (V2)</em>, April 2026 (seed hypothesis) · <strong>METR</strong>, time-horizons research (metr.org/time-horizons) · <strong>ARC Prize Foundation</strong>: ARC-AGI-3 technical report (March 2026), ARC Prize 2025 results · <strong>Scale AI</strong> SWE-bench Pro leaderboards (standardized public/private) · <strong>llm-stats</strong> vendor-aggregate SWE-bench Pro tracking · <strong>OpenAI</strong> SWE-bench Verified contamination withdrawal (Feb 2026) · <strong>Forrester</strong> (2026 spend postponement data) · <strong>Gartner</strong> (agentic adoption & decision-maker outcome survey) · <strong>Bain</strong> enterprise AI deployment survey · <strong>MIT Project NANDA</strong>, <em>The GenAI Divide</em> (2025) · <strong>SignalFire</strong> State of Talent (2025) · <strong>Stanford Digital Economy Lab</strong> · <strong>Anthropic Economic Index</strong> & O*NET task taxonomy · <strong>Uber</strong> agentic-tool spend caps, 2026 · <strong>Kalai & Nachum</strong>, calibration/bluffing (arXiv:2509.04664) · <strong>Self-driving autonomy</strong> timelines 2016–2026.
+            <strong>Devresse, A., et al.</strong>, <em>The AI Revolution: 2026 Brief (V2)</em>, April 2026 (seed hypothesis) · <strong>METR</strong>, time-horizons research (metr.org/time-horizons) · <strong>ARC Prize Foundation</strong>: ARC-AGI-3 technical report (March 2026), ARC Prize 2025 results · <strong>Scale AI</strong> SWE-bench Pro leaderboards (standardized public/private) · <strong>llm-stats</strong> vendor-aggregate SWE-bench Pro tracking · <strong>OpenAI</strong> SWE-bench Verified contamination withdrawal (Feb 2026) · <strong>Forrester</strong> (2026 spend postponement data) · <strong>Gartner</strong> (agentic adoption & decision-maker outcome survey) · <strong>Bain</strong> enterprise AI deployment survey · <strong>MIT Project NANDA</strong>, <em>The GenAI Divide</em> (2025) · <strong>SignalFire</strong> State of Talent (2025) · <strong>Stanford Digital Economy Lab</strong> · <strong>Anthropic Economic Index</strong> & O*NET task taxonomy · <strong>Uber</strong> agentic-tool spend caps, 2026 · <strong>Kalai & Nachum</strong>, calibration/bluffing (arXiv:2509.04664) · <strong>Self-driving autonomy</strong> timelines 2016–2026.
           </p>
           <div className="bg-slate-950 p-3 rounded-lg border border-slate-900 text-[10px] text-slate-500 leading-normal flex items-start gap-2">
             <RefreshCw size={12} className="shrink-0 mt-0.5 text-indigo-500" />
             <span>
-              <strong>Provenance Note:</strong> Figures above reflect verified sources as discussed and web-checked on July 10, 2026. Several figures (especially vendor benchmark scores and fast-decaying leaderboards) carry extremely short half-lives and must be re-verified before reuse.
+              <strong>Provenance Note:</strong> Figures above reflect verified sources and web-checked on July 10, 2026. Several figures (especially vendor benchmark scores and fast-decaying leaderboards) carry extremely short half-lives and must be re-verified before reuse.
             </span>
           </div>
         </section>
@@ -535,7 +520,7 @@ function App() {
 
       {/* FOOTER */}
       <footer className="border-t border-slate-900 py-8 bg-slate-950 text-center text-xs text-slate-600">
-        <p>© 2026 Strategic Briefing Synthesis. Prepared by Arthur Devresse et al.</p>
+        <p>© 2026 Briefing Synthesis. Prepared by Arthur Devresse et al.</p>
         <p className="mt-1.5 text-[10px]">Evaluating the meta-metrics of cognitive capability and deployment lag.</p>
       </footer>
 

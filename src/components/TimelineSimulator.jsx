@@ -120,7 +120,7 @@ const TimelineSimulator = () => {
           </div>
           <input
             type="range"
-            min="4"
+            min="3"
             max="12"
             step="0.5"
             value={doublingTime}
@@ -128,7 +128,7 @@ const TimelineSimulator = () => {
             className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
           />
           <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-            <span>4m (Recent)</span>
+            <span>3m (Aggressive)</span>
             <span>7m (Default)</span>
             <span>12m (Conservative)</span>
           </div>
@@ -243,22 +243,22 @@ const TimelineSimulator = () => {
           return (
             <div 
               key={idx} 
-              className="bg-slate-900/30 border border-slate-900 hover:border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start gap-4 transition-all"
+              className="bg-slate-900/30 border border-slate-900 hover:border-slate-800 rounded-xl p-4 sm:p-5 flex flex-col gap-3 transition-all"
             >
-              <div className="space-y-1.5 max-w-xl">
+              <div className="space-y-1.5">
                 <h4 className="font-bold text-white text-sm sm:text-base">{stage.name}</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">{stage.desc}</p>
                 <div className="text-[10px] text-slate-500 font-semibold">{stage.driver}</div>
               </div>
-              <div className="flex flex-row sm:flex-col items-baseline sm:items-end justify-between w-full sm:w-auto shrink-0 border-t sm:border-t-0 border-slate-900 pt-3 sm:pt-0 gap-2">
-                <div className="text-right">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Recalculated Estimate</div>
-                  <div className="text-lg font-black text-indigo-400 font-mono mt-0.5">
+              <div className="border-t border-slate-900 pt-3 flex flex-row flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-0.5">Recalculated Estimate</div>
+                  <div className="text-base font-black text-indigo-400 font-mono leading-snug">
                     {stage.calculated}
                   </div>
                 </div>
                 {isShifted && (
-                  <div className="text-right">
+                  <div>
                     <span className="text-[8px] uppercase tracking-wider text-slate-600 block">Baseline Estimate</span>
                     <span className="text-[11px] font-mono text-slate-500 line-through">{stage.original}</span>
                   </div>

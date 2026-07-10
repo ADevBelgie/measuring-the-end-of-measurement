@@ -1,5 +1,74 @@
 import React from 'react';
 import { Ruler, ShieldAlert, Sparkles } from 'lucide-react';
+import {
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis,
+  CartesianGrid, Tooltip
+} from 'recharts';
+
+const SWE_TREND_DATA = [
+  { time: 0, pct: 45.9, labelVal: '45.9%', labelName: 'April 2026' },
+  { time: 1, pct: 59.1, labelVal: '59.1%', labelName: 'July 2026' }
+];
+
+const COLORS = {
+  indigo: '#6366f1'
+};
+
+const CustomTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null;
+  const point = payload[0]?.payload;
+  return (
+    <div className="bg-slate-900/95 border border-slate-700 rounded-lg px-3 py-2 shadow-xl text-xs font-sans">
+      <div className="text-slate-500 text-[10px] mb-1 font-semibold uppercase tracking-wider">
+        {point?.labelName}
+      </div>
+      <div className="flex items-center gap-2 py-0.5">
+        <span className="h-2 w-2 rounded-full bg-indigo-500" />
+        <span className="text-slate-300 font-medium">Standardized Score:</span>
+        <span className="text-white font-bold">{payload[0].value}%</span>
+      </div>
+    </div>
+  );
+};
+
+const makeDot = (color) => (props) => {
+  const { cx, cy, payload } = props;
+  if (cx == null || cy == null) return null;
+  return (
+    <g className="font-sans">
+      <circle cx={cx} cy={cy} r={5} fill={color} fillOpacity={0.2} />
+      <circle cx={cx} cy={cy} r={3.5} fill={color} />
+      {payload.labelVal && (
+        <g>
+          {/* Label Background */}
+          <text
+            x={cx} y={cy - 12}
+            textAnchor="middle"
+            fill="#090d16"
+            stroke="#090d16"
+            strokeWidth={4}
+            fontSize={10}
+            fontWeight={700}
+            className="select-none pointer-events-none"
+          >
+            {payload.labelVal}
+          </text>
+          {/* Real Text */}
+          <text
+            x={cx} y={cy - 12}
+            textAnchor="middle"
+            fill="#f8fafc"
+            fontSize={10}
+            fontWeight={600}
+            className="select-none pointer-events-none"
+          >
+            {payload.labelVal}
+          </text>
+        </g>
+      )}
+    </g>
+  );
+};
 
 const SWEBenchRulers = () => {
   const JulyRulers = [
@@ -42,36 +111,49 @@ const SWEBenchRulers = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Trend Line Visual */}
-        <div className="bg-slate-950 border border-slate-900 rounded-xl p-5 flex flex-col justify-between min-h-[220px]">
+        {/* Trend Line Visual utilizing Recharts for perfect aspect ratio & styling consistency */}
+        <div className="bg-slate-950 border border-slate-900 rounded-xl p-4 sm:p-5 flex flex-col justify-between min-h-[300px]">
           <div className="flex justify-between items-center text-xs text-slate-500 uppercase tracking-widest border-b border-slate-900 pb-2">
             <span>Historical Standardized Trend</span>
             <span className="text-indigo-400">Scale Standardized</span>
           </div>
 
-          <div className="relative h-28 my-4 flex items-end">
-            {/* SVG Trend Line */}
-            <svg viewBox="0 0 100 40" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-              <line x1="15" y1="35" x2="85" y2="15" stroke="#312e81" strokeWidth="1.5" />
-              <line x1="15" y1="35" x2="85" y2="15" stroke="#6366f1" strokeWidth="1.5" strokeDasharray="2 1" />
-              
-              {/* Point 1 */}
-              <circle cx="15" cy="35" r="2.5" className="fill-indigo-500" />
-              {/* Point 2 */}
-              <circle cx="85" cy="15" r="2.5" className="fill-indigo-500" />
-            </svg>
-
-            {/* Labels overlay */}
-            <div className="absolute inset-0 pointer-events-none text-xs">
-              <div className="absolute left-[15%] bottom-[5%] -translate-x-1/2 flex flex-col items-center">
-                <span className="font-bold text-white text-sm">45.9%</span>
-                <span className="text-[9px] text-slate-500 mt-0.5">April 2026</span>
-              </div>
-              <div className="absolute right-[15%] top-[10%] translate-x-1/2 flex flex-col items-center">
-                <span className="font-bold text-indigo-400 text-sm">59.1%</span>
-                <span className="text-[9px] text-slate-500 mt-0.5">July 2026</span>
-              </div>
-            </div>
+          <div className="w-full my-4">
+            <ResponsiveContainer width="100%" height={160}>
+              <LineChart data={SWE_TREND_DATA} margin={{ top: 20, right: 30, bottom: 5, left: 10 }}>
+                <CartesianGrid stroke="#1e293b" strokeDasharray="4 4" />
+                <XAxis
+                  dataKey="time"
+                  type="number"
+                  domain={[-0.1, 1.1]}
+                  ticks={[0, 1]}
+                  tickFormatter={(v) => v === 0 ? 'April 2026' : 'July 2026'}
+                  tick={{ fill: '#64748b', fontSize: 10 }}
+                  axisLine={{ stroke: '#334155' }}
+                  tickLine={{ stroke: '#334155' }}
+                />
+                <YAxis
+                  domain={[0, 100]}
+                  ticks={[0, 20, 40, 60, 80, 100]}
+                  tickFormatter={(v) => v <= 100 ? `${v}%` : ''}
+                  tick={{ fill: '#64748b', fontSize: 10 }}
+                  axisLine={{ stroke: '#334155' }}
+                  tickLine={{ stroke: '#334155' }}
+                  width={36}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Line
+                  dataKey="pct"
+                  name="Scale Standardized"
+                  type="linear"
+                  stroke={COLORS.indigo}
+                  strokeWidth={2.5}
+                  dot={makeDot(COLORS.indigo)}
+                  activeDot={{ r: 6, fill: COLORS.indigo }}
+                  isAnimationActive={true}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
 
           <div className="text-[10px] text-slate-400 leading-relaxed bg-indigo-950/20 border border-indigo-900/35 rounded-lg p-2.5 flex items-start gap-2">

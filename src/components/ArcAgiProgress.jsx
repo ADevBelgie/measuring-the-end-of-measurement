@@ -1,53 +1,133 @@
 import React, { useState } from 'react';
 import { Activity, Info } from 'lucide-react';
+import {
+  ResponsiveContainer, LineChart, Line, XAxis, YAxis,
+  CartesianGrid, Tooltip
+} from 'recharts';
 
+// ── Colors ────────────────────────────────────────────────────────
+const COLORS = {
+  arc1: '#6366f1',  // indigo
+  arc2: '#a78bfa',  // violet
+  arc3: '#fbbf24',  // amber
+};
+
+// ── Strict Linear Timeline Data ───────────────────────────────────
+// Using exact decimal years as the X values to maintain a strictly linear time axis.
+const ARC1_DATA = [
+  { year: 2020.0, pct: 0,    labelVal: '0%',   labelName: 'GPT-3',           align: 'middle', dy: -12, dx: 0 },
+  { year: 2024.5, pct: 5,    labelVal: '5%',   labelName: 'GPT-4o',          align: 'middle', dy: -12, dx: 0 },
+  { year: 2024.9, pct: 93,   labelVal: '93%',  labelName: 'o3 (Dec 24)',     align: 'end',    dy: -12, dx: -8 },
+  { year: 2026.0, pct: 98,   labelVal: '98%',  labelName: 'Early 26',        align: 'end',    dy: -12, dx: -8 },
+];
+
+const ARC2_DATA = [
+  { year: 2025.2, pct: 2.5,  labelVal: '2.5%', labelName: 'ARC-2 Launch',    align: 'middle', dy: -12, dx: 0 },
+  { year: 2026.1, pct: 77.1, labelVal: '77.1%',labelName: 'Gemini 3.1 Pro',  align: 'end',    dy: 18,  dx: -8 },
+  { year: 2026.1, pct: 84.6, labelVal: '84.6%',labelName: 'G3 Deep Think',   align: 'start',  dy: -12, dx: 8 },
+];
+
+const ARC3_DATA = [
+  { year: 2026.2, pct: 0.37, labelVal: '0.37%',labelName: 'ARC-3 Launch',    align: 'end',    dy: -12, dx: -8 },
+  { year: 2026.5, pct: 7.8,  labelVal: '7.8%', labelName: 'GPT-5.6 Sol ✓',   align: 'start',  dy: -12, dx: 8 },
+];
+
+// ── Custom tooltip ────────────────────────────────────────────────
+const CustomTooltip = ({ active, payload }) => {
+  if (!active || !payload?.length) return null;
+  const point = payload[0]?.payload;
+  
+  // Format decimal year back to readable date
+  const formatTooltipYear = (yr) => {
+    if (yr === 2020.0) return '2020 (GPT-3)';
+    if (yr === 2024.5) return 'Mid-2024 (GPT-4o)';
+    if (yr === 2024.9) return 'Dec 2024 (o3)';
+    if (yr === 2025.2) return 'March 2025 (ARC-2 Launch)';
+    if (yr === 2026.0) return 'Early 2026';
+    if (yr === 2026.1) return 'Feb 2026 (Gemini 3)';
+    if (yr === 2026.2) return 'March 2026 (ARC-3 Launch)';
+    if (yr === 2026.5) return 'July 2026 (GPT-5.6 Sol)';
+    return yr;
+  };
+
+  return (
+    <div className="bg-slate-900/95 border border-slate-700 rounded-lg px-3 py-2 shadow-xl text-xs font-sans">
+      <div className="text-slate-500 text-[10px] mb-1 font-semibold uppercase tracking-wider">
+        {formatTooltipYear(point?.year)}
+      </div>
+      {payload.map((entry, i) => (
+        <div key={i} className="flex items-center gap-2 py-0.5">
+          <span className="h-2 w-2 rounded-full" style={{ background: entry.color }} />
+          <span className="text-slate-300 font-medium">{entry.name}:</span>
+          <span className="text-white font-bold">{entry.value}%</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ── Custom dot with label ─────────────────────────────────────────
+const makeDot = (color) => (props) => {
+  const { cx, cy, payload } = props;
+  if (cx == null || cy == null) return null;
+  
+  const align = payload.align || 'middle';
+  const dy = payload.dy ?? -12;
+  const dx = payload.dx ?? 0;
+
+  return (
+    <g className="font-sans">
+      <circle cx={cx} cy={cy} r={5} fill={color} fillOpacity={0.2} />
+      <circle cx={cx} cy={cy} r={3.5} fill={color} />
+      {payload.labelVal && (
+        <g>
+          {/* Label Background for readability */}
+          <text
+            x={cx + dx} y={cy + dy}
+            textAnchor={align}
+            fill="#090d16"
+            stroke="#090d16"
+            strokeWidth={4}
+            fontSize={10}
+            fontWeight={700}
+            className="select-none pointer-events-none"
+          >
+            {payload.labelVal}
+          </text>
+          {/* Real Text */}
+          <text
+            x={cx + dx} y={cy + dy}
+            textAnchor={align}
+            fill="#f8fafc"
+            fontSize={10}
+            fontWeight={600}
+            className="select-none pointer-events-none"
+          >
+            {payload.labelVal}
+          </text>
+        </g>
+      )}
+    </g>
+  );
+};
+
+// ── Main Component ───────────────────────────────────────────────
 const ArcAgiProgress = () => {
   const [activeTab, setActiveTab] = useState('all');
 
-  const benchmarks = [
-    {
-      id: 'arc1',
-      name: 'ARC-AGI-1 (2020)',
-      description: 'The original abstraction benchmark. Sat near 0% for years, then collapsed in under 12 months once test-time reasoning arrived.',
-      color: 'stroke-indigo-500',
-      fill: 'bg-indigo-500',
-      textColor: 'text-indigo-400',
-      points: [
-        { label: '2020 (GPT-3)', x: 10, y: 95, val: '0%' },
-        { label: 'Mid-2024 (GPT-4o)', x: 45, y: 90, val: '5%' },
-        { label: 'Dec 2024 (o3)', x: 60, y: 15, val: '93%' },
-        { label: 'Early 2026', x: 90, y: 5, val: '98%' }
-      ]
-    },
-    {
-      id: 'arc2',
-      name: 'ARC-AGI-2 (March 2025)',
-      description: 'Second generation. Harder logic, interactive environments. Gemini 3 Deep Think reached 84.6% within a year.',
-      color: 'stroke-violet-400',
-      fill: 'bg-violet-400',
-      textColor: 'text-violet-400',
-      points: [
-        { label: 'March 2025 (Launch)', x: 62, y: 92, val: '2.5%' },
-        { label: 'Feb 2026 (Gemini 3.1 Pro)', x: 90, y: 23, val: '77.1%' },
-        { label: 'Feb 2026 (Gemini 3 Deep Think)', x: 90, y: 15, val: '84.6%' }
-      ]
-    },
-    {
-      id: 'arc3',
-      name: 'ARC-AGI-3 (March 2026)',
-      description: 'Built off the current training path entirely — language-free, scored by squared action-efficiency (RHAE). First verified movement is GPT-5.6 Sol at 7.8% (July 2026).',
-      color: 'stroke-amber-400',
-      fill: 'bg-amber-400',
-      textColor: 'text-amber-400',
-      points: [
-        { label: 'March 2026 (Launch)', x: 91, y: 99, val: '0.37%' },
-        { label: 'July 9, 2026 (GPT-5.6 Sol)', x: 98, y: 92, val: '7.8% [Verified]' }
-      ]
-    }
+  const seriesInfo = [
+    { id: 'arc1', name: 'ARC-AGI-1 (2020)', description: 'The original abstraction benchmark. Sat near 0% for years, then collapsed in under 12 months once test-time reasoning arrived.' },
+    { id: 'arc2', name: 'ARC-AGI-2 (March 2025)', description: 'Second generation. Harder logic, interactive environments. Gemini 3 Deep Think reached 84.6% within a year.' },
+    { id: 'arc3', name: 'ARC-AGI-3 (March 2026)', description: 'Built off the current training path entirely — language-free, scored by RHAE. First verified movement is GPT-5.6 Sol at 7.8% (July 2026).' },
   ];
+
+  const showArc1 = activeTab === 'all' || activeTab === 'arc1';
+  const showArc2 = activeTab === 'all' || activeTab === 'arc2';
+  const showArc3 = activeTab === 'all' || activeTab === 'arc3';
 
   return (
     <div className="glass-panel p-6 sm:p-8 flex flex-col gap-6 glow-indigo">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
         <div>
           <h3 className="text-xl font-bold text-white font-sans flex items-center gap-2">
@@ -58,180 +138,105 @@ const ArcAgiProgress = () => {
             Visualizing the non-linear decay of abstraction benchmarks. Note the four-year plateau of ARC-1 followed by its sudden collapse.
           </p>
         </div>
-        <div className="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 self-stretch sm:self-auto text-xs">
-          <button 
-            onClick={() => setActiveTab('all')}
+        <div className="flex gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 self-stretch sm:self-auto text-xs shrink-0 font-sans">
+          <button onClick={() => setActiveTab('all')}
             className={`px-3 py-1.5 rounded-md font-medium transition-colors ${activeTab === 'all' ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white border border-transparent'}`}
-          >
-            All Series
-          </button>
-          {benchmarks.map(b => (
-            <button
-              key={b.id}
-              onClick={() => setActiveTab(b.id)}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${activeTab === b.id ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white border border-transparent'}`}
-            >
-              ARC-{b.id.slice(-1)}
-            </button>
+          >All Series</button>
+          {seriesInfo.map(s => (
+            <button key={s.id} onClick={() => setActiveTab(s.id)}
+              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${activeTab === s.id ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white border border-transparent'}`}
+            >ARC-{s.id.slice(-1)}</button>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 relative bg-slate-950 border border-slate-900 rounded-xl p-4 min-h-[300px] flex items-center justify-center">
-          {/* Custom SVG Line Chart */}
-          <svg viewBox="0 0 100 100" className="w-full h-full max-h-[350px] overflow-visible" preserveAspectRatio="none">
-            {/* Grid lines */}
-            <line x1="0" y1="10" x2="100" y2="10" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1" />
-            <line x1="0" y1="30" x2="100" y2="30" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1" />
-            <line x1="0" y1="50" x2="100" y2="50" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1" />
-            <line x1="0" y1="70" x2="100" y2="70" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1" />
-            <line x1="0" y1="90" x2="100" y2="90" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="1" />
-            
-            {/* Year Dividers */}
-            <line x1="10" y1="0" x2="10" y2="100" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="2" />
-            <line x1="45" y1="0" x2="45" y2="100" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="2" />
-            <line x1="60" y1="0" x2="60" y2="100" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="2" />
-            <line x1="90" y1="0" x2="90" y2="100" stroke="#1e293b" strokeWidth="0.2" strokeDasharray="2" />
+      {/* Chart Layout: Stretched to full-width of the panel */}
+      <div className="w-full bg-slate-950 border border-slate-900 rounded-xl p-2 sm:p-4">
+        <ResponsiveContainer width="100%" height={380}>
+          {/* 
+            Margining details: 
+            Left side: YAxis is width 40, left margin is 10. Total spacing on left = 50px.
+            Right side: right margin is 50. Total spacing on right = 50px.
+            This ensures the grid area is perfectly centered inside the dark panel.
+          */}
+          <LineChart margin={{ top: 25, right: 50, bottom: 5, left: 10 }}>
+            <CartesianGrid stroke="#1e293b" strokeDasharray="4 4" />
+            <XAxis
+              dataKey="year"
+              type="number"
+              domain={[2019.8, 2026.7]}
+              ticks={[2020, 2021, 2022, 2023, 2024, 2025, 2026]}
+              tickFormatter={(tick) => String(tick)}
+              tick={{ fill: '#64748b', fontSize: 11 }}
+              axisLine={{ stroke: '#334155' }}
+              tickLine={{ stroke: '#334155' }}
+            />
+            <YAxis
+              domain={[0, 105]}
+              ticks={[0, 20, 40, 60, 80, 100]}
+              tickFormatter={(v) => v <= 100 ? `${v}%` : ''}
+              tick={{ fill: '#64748b', fontSize: 11 }}
+              axisLine={{ stroke: '#334155' }}
+              tickLine={{ stroke: '#334155' }}
+              width={40}
+            />
+            <Tooltip content={<CustomTooltip />} />
 
-            {/* Render lines */}
-            {benchmarks.map(b => {
-              if (activeTab !== 'all' && activeTab !== b.id) return null;
-              
-              // Construct path
-              const path = b.points.reduce((acc, p, idx) => {
-                return acc + `${idx === 0 ? 'M' : 'L'} ${p.x} ${p.y}`;
-              }, '');
-              
-              return (
-                <g key={b.id}>
-                  {/* Line shadow */}
-                  <path
-                    d={path}
-                    fill="none"
-                    className={`${b.color} opacity-20`}
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                  />
-                  {/* Real Line */}
-                  <path
-                    d={path}
-                    fill="none"
-                    className={`${b.color} transition-all duration-500`}
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeDasharray={b.id === 'arc3' ? '2 1' : 'none'}
-                  />
-                  
-                  {/* Points */}
-                  {b.points.map((p, idx) => (
-                    <g key={idx} className="group/point">
-                      {/* Pulse ring for key events */}
-                      <circle
-                        cx={p.x}
-                        cy={p.y}
-                        r="3.5"
-                        className={`${b.color.replace('stroke-', 'fill-')} opacity-0 group-hover/point:opacity-30 group-hover/point:animate-ping transition-opacity duration-300`}
-                      />
-                      <circle
-                        cx={p.x}
-                        cy={p.y}
-                        r="1.8"
-                        className={`${b.color.replace('stroke-', 'fill-')} border border-slate-950 stroke-1 cursor-pointer`}
-                      />
-                    </g>
-                  ))}
-                </g>
-              );
-            })}
-          </svg>
+            {showArc1 && (
+              <Line
+                data={ARC1_DATA} dataKey="pct" name="ARC-AGI-1" type="linear"
+                stroke={COLORS.arc1} strokeWidth={2.5}
+                dot={makeDot(COLORS.arc1)}
+                activeDot={{ r: 7, fill: COLORS.arc1 }}
+                isAnimationActive={true}
+              />
+            )}
+            {showArc2 && (
+              <Line
+                data={ARC2_DATA} dataKey="pct" name="ARC-AGI-2" type="linear"
+                stroke={COLORS.arc2} strokeWidth={2.5}
+                dot={makeDot(COLORS.arc2)}
+                activeDot={{ r: 7, fill: COLORS.arc2 }}
+                isAnimationActive={true}
+              />
+            )}
+            {showArc3 && (
+              <Line
+                data={ARC3_DATA} dataKey="pct" name="ARC-AGI-3" type="linear"
+                stroke={COLORS.arc3} strokeWidth={2.5} strokeDasharray="6 3"
+                dot={makeDot(COLORS.arc3)}
+                activeDot={{ r: 7, fill: COLORS.arc3 }}
+                isAnimationActive={true}
+              />
+            )}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
-          {/* Dynamic Floating Labels on Chart */}
-          <div className="absolute inset-0 pointer-events-none select-none">
-            {/* Y Axis Legend */}
-            <div className="absolute left-2 top-0 h-full flex flex-col justify-between text-[9px] text-slate-500 py-3">
-              <span>100% (Solved)</span>
-              <span>80%</span>
-              <span>60%</span>
-              <span>40%</span>
-              <span>20%</span>
-              <span>0%</span>
-            </div>
-
-            {/* Timeline X Labels */}
-            <div className="absolute bottom-2 left-0 w-full flex justify-between text-[9px] text-slate-500 px-6 sm:px-10">
-              <span style={{ left: '10%' }} className="relative">2020</span>
-              <span style={{ left: '44%' }} className="relative">Mid-2024</span>
-              <span style={{ left: '59%' }} className="relative">Dec 2024</span>
-              <span style={{ left: '88%' }} className="relative">Early 2026</span>
-              <span style={{ left: '96%' }} className="relative text-amber-500 font-semibold">Jul 2026</span>
-            </div>
-            
-            {/* Highlighted labels inside the chart area */}
-            {benchmarks.map(b => {
-              if (activeTab !== 'all' && activeTab !== b.id) return null;
-              return b.points.map((p, idx) => {
-                // Determine layout alignment to prevent overlapping
-                const isSol = p.label.includes('GPT-5.6 Sol');
-                const isO3 = p.label.includes('o3');
-                const isDeepThink = p.label.includes('Deep Think');
-                const isG3Pro = p.label.includes('3.1 Pro');
-                
-                return (
-                  <div
-                    key={idx}
-                    className="absolute bg-slate-900/95 border border-slate-800 text-[10px] rounded px-1.5 py-0.5 shadow-md flex flex-col items-center pointer-events-auto"
-                    style={{
-                      left: `${p.x}%`,
-                      top: `${p.y}%`,
-                      transform: isSol 
-                        ? 'translate(-90%, -110%)' 
-                        : isO3 
-                          ? 'translate(-50%, -120%)' 
-                          : isDeepThink 
-                            ? 'translate(-10%, 15%)' 
-                            : isG3Pro 
-                              ? 'translate(-95%, -110%)'
-                              : 'translate(-50%, -120%)',
-                    }}
-                  >
-                    <span className="font-bold text-white">{p.val}</span>
-                    <span className="text-[8px] text-slate-400 whitespace-nowrap">{p.label.split(' (')[0]}</span>
-                  </div>
-                );
-              });
-            })}
-          </div>
+      {/* Details layout: Three columns side-by-side below the chart */}
+      <div className="flex flex-col gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {seriesInfo.map(s => {
+            const isActive = activeTab === 'all' || activeTab === s.id;
+            return (
+              <div key={s.id}
+                className={`p-4 rounded-xl border transition-all duration-300 ${isActive ? 'bg-slate-900/40 border-slate-800' : 'opacity-40 border-transparent bg-transparent'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: COLORS[s.id] }} />
+                  <h4 className="font-semibold text-white text-sm">{s.name}</h4>
+                </div>
+                <p className="text-xs text-slate-400 mt-2 leading-relaxed">{s.description}</p>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Details list */}
-        <div className="flex flex-col justify-between gap-4">
-          <div className="space-y-4">
-            {benchmarks.map(b => {
-              const isActive = activeTab === 'all' || activeTab === b.id;
-              return (
-                <div 
-                  key={b.id} 
-                  className={`p-4 rounded-xl border transition-all duration-300 ${isActive ? 'bg-slate-900/40 border-slate-800' : 'opacity-40 border-transparent bg-transparent'}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className={`h-2.5 w-2.5 rounded-full ${b.fill}`} />
-                    <h4 className="font-semibold text-white text-sm">{b.name}</h4>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                    {b.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="bg-amber-950/20 border border-amber-900/30 rounded-xl p-4 text-xs flex gap-3 text-amber-300 leading-relaxed">
-            <Info size={24} className="shrink-0 text-amber-400 mt-0.5" />
-            <div>
-              <span className="font-semibold block text-amber-200">The Abstraction Recipe:</span>
-              ARC Prize releases new editions strictly designed to break existing scaling trends. ARC-3's GPT-5.6 Sol mark (7.8% verified) shows critical first movement, but the true test is whether this marks the start of a linear climb or the precursor to another paradigm-unlocking collapse.
-            </div>
+        <div className="bg-amber-950/20 border border-amber-900/30 rounded-xl p-4 text-xs flex gap-3 text-amber-300 leading-relaxed">
+          <Info size={24} className="shrink-0 text-amber-400 mt-0.5" />
+          <div>
+            <span className="font-semibold block text-amber-200">The Abstraction Recipe:</span>
+            ARC Prize releases new editions strictly designed to break existing scaling trends. ARC-3's GPT-5.6 Sol mark (7.8% verified) shows critical first movement, but the true test is whether this marks the start of a linear climb or the precursor to another paradigm-unlocking collapse.
           </div>
         </div>
       </div>
