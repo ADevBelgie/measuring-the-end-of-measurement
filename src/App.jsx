@@ -124,7 +124,7 @@ function App() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 text-left">
             <div className="glass-panel p-4 flex flex-col justify-between border-slate-800">
               <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block mb-1">Benchmark Half-Life</span>
-              <span className="text-xl font-black text-indigo-400 font-mono">~8-Month Half-Life</span>
+              <span className="text-xl font-black text-indigo-400 font-mono">≤8-Month Half-Life</span>
               <span className="text-[9.5px] text-slate-400 leading-normal mt-1 block">
                 Proposed April 2026; conservative — see §1
               </span>
