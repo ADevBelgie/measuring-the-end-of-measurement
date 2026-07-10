@@ -181,11 +181,11 @@ const TimelineSimulator = () => {
         <div className="space-y-3">
           <div className="flex justify-between text-xs">
             <span className="font-semibold text-slate-300 flex items-center gap-1">
-              Tail Probability beyond 2035
+              Tail Probability (Silence After 2035)
               <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
                 <HelpCircle size={12} />
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
-                  Estimated probability that the terminal "Silence" boundary is not reached by 2035 (reflecting tail risk of verification-resistant remnants).
+                  Probability that the silence lands after 2035. The brief's stated position is ~30%; "disanalogies fully offset the self-driving reference class" argues ~15%, "driving's residue is the true prior" argues ~45%.
                 </span>
               </span>
             </span>
@@ -195,16 +195,17 @@ const TimelineSimulator = () => {
           </div>
           <input
             type="range"
-            min="10"
-            max="50"
+            min="15"
+            max="45"
+            step="15"
             value={residueOffset}
             onChange={(e) => setResidueOffset(parseInt(e.target.value))}
             className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
           />
           <div className="flex justify-between text-[10px] text-slate-500 font-mono">
-            <span>10% (Low)</span>
-            <span>30% (Default)</span>
-            <span>50% (High)</span>
+            <span>15% (Full offset)</span>
+            <span>30% (Brief's position)</span>
+            <span>45% (Driving prior)</span>
           </div>
         </div>
       </div>
@@ -245,7 +246,7 @@ const TimelineSimulator = () => {
             </div>
           </div>
           <div className="text-[10px] text-slate-400 border-t border-indigo-900/20 pt-2 leading-relaxed">
-            <strong>Regression Test Validation:</strong> At default parameters (METR Doubling Time = 7 months, Tail Probability = 30%), the formulas yield dates identical to the brief's central estimate table of frontier capabilities (Verifiable: ~2027–2029; R&D threshold: ~2028; Year-crossing: ~2029–2032; Economy: ~2029–2031; Silence: Mode ~2031–2034).
+            <strong>Regression check:</strong> At default parameters (DT = 7, Lag = 2, Tail = 30%), these formulas reproduce the brief's published table verbatim: ~2027–2029 · ~2028 · ~2029–2032 · ~2029–2031 · mode 2031–2034 with ~30% beyond 2035. If the numbers you see at defaults differ from these, the simulator has a bug — please report it.
           </div>
         </div>
       )}

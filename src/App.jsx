@@ -16,6 +16,7 @@ function App() {
   };
   const [readingMode, setReadingMode] = useState(getInitialMode);
   const [disclosureOpen, setDisclosureOpen] = useState(false);
+  const [sourcesOpen, setSourcesOpen] = useState(false);
 
   // Compute days since publication (July 10, 2026)
   const daysOld = Math.max(0, Math.floor((Date.now() - new Date('2026-07-10T00:00:00')) / 86400000));
@@ -47,10 +48,9 @@ function App() {
             : 'bg-rose-950/70 border-rose-800/50 text-rose-300 animate-pulse'
       }`}>
         <span>
-          Data as of July 10, 2026 ({daysOld} days elapsed). 
-          {daysOld < 60 && ' ⏱️ Baseline signal remains valid.'}
-          {daysOld >= 60 && daysOld < 120 && ' ⚠️ Alert: Benchmark half-life decay has begun.'}
-          {daysOld >= 120 && ' 🚨 Warning: Half-life saturated. High signal rot risk! Re-verify sources.'}
+          {daysOld < 60 && "Data as of July 10, 2026."}
+          {daysOld >= 60 && daysOld < 120 && `Data as of July 10, 2026 — ${daysOld} days old. By this brief's own thesis, some figures below have likely decayed. Re-verify before citing.`}
+          {daysOld >= 120 && `Data as of July 10, 2026 — ${daysOld} days old. This exceeds half the proposed benchmark half-life. Treat all leaderboard figures as historical.`}
         </span>
       </div>
 
@@ -165,8 +165,8 @@ function App() {
               </button>
             </div>
             <p>
-              <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 brief that supplied this document's seed hypothesis (the benchmark half-life).
-              {!disclosureOpen && '...'}
+              <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 brief that supplied this document's seed hypothesis.
+              {!disclosureOpen && ' *Expand for the full disclosure and status note.*'}
             </p>
             {disclosureOpen && (
               <div className="space-y-3 animate-fadeIn">
@@ -231,18 +231,18 @@ function App() {
                   <strong>First, benchmarks die fast.</strong> The April 2026 strategic brief proposed an ~8-month benchmark half-life; events since suggest that was conservative. SWE-bench Verified was effectively retired after OpenAI's February 2026 contamination withdrawal. Its successor, SWE-bench Pro, saw its standardized top score move from ~46% (April 2026) to ~59% (Scale standardized public set, July 2026) in roughly ten weeks — while simultaneously fragmenting into three competing "official" numbers, indicating a decay of <em>signal</em> as much as of difficulty.
                 </p>
                 <p>
-                  <strong>Second, the decay is punctuated.</strong> ARC-AGI-1 sat near zero from 2020 through 2023, then collapsed when test-time reasoning (o1/o3) arrived. ARC-AGI-2 went from ~2.5% to ~84.6% (Gemini 3 Deep Think) in under a year once reasoning models matured. ARC-AGI-3, launched March 2026 with frontier systems below 1% against a 100% human solve rate, is built off the current training paradigm's path entirely — interactive, language-free, scored by squared action-efficiency (RHAE) against human baselines.
+                  <strong>Second, the decay is punctuated.</strong> ARC-AGI-1 sat near zero from 2020 through 2023, then collapsed when test-time reasoning (o1/o3) arrived. ARC-AGI-2 went from ~2.5% at its March 2025 launch to 77.1% (Gemini 3.1 Pro) and 84.6% (Gemini 3 Deep Think) by February 2026 — near its practical ceiling in under a year. ARC-AGI-3, launched March 2026 with frontier systems below 1% against a 100% human solve rate, is built off the current training paradigm's path entirely — interactive, language-free, scored by squared action-efficiency (RHAE) against human baselines.
                 </p>
               </>
             ) : (
               <div className="bg-slate-900/30 border border-slate-900 p-4 rounded-xl space-y-3">
                 <div className="flex items-start gap-2.5">
                   <CheckCircle size={15} className="text-indigo-400 shrink-0 mt-0.5" />
-                  <p className="text-sm m-0"><strong>Benchmark Churn:</strong> Benchmarks decay exponentially. SWE-bench Pro jumped from 46% to 59% in 10 weeks, fragmenting into three competing metrics and demonstrating signal decay.</p>
+                  <p className="text-sm m-0"><strong>Benchmarks die fast:</strong> SWE-bench Pro's top score moved from 46% to 59% in ten weeks while fragmenting into three competing "official" numbers — a decay of signal, not just difficulty.</p>
                 </div>
                 <div className="flex items-start gap-2.5">
                   <CheckCircle size={15} className="text-indigo-400 shrink-0 mt-0.5" />
-                  <p className="text-sm m-0"><strong>Punctuated Collapse:</strong> Benchmarks don't decay smoothly. They plateau for years (like ARC-AGI-1) and then collapse instantly once paradigm-shifting capabilities (like test-time reasoning) are integrated.</p>
+                  <p className="text-sm m-0"><strong>But not smoothly:</strong> Benchmarks plateau for years (ARC-AGI-1 sat near zero from 2020–2023), then collapse suddenly when a missing paradigm ingredient arrives (test-time reasoning). The chart below shows the pattern.</p>
                 </div>
               </div>
             )}
@@ -300,7 +300,7 @@ function App() {
               </>
             ) : (
               <p className="text-slate-300">
-                A <strong>working year</strong> (~2,000 hours) is the ultimate unit of delegated work. Longer horizons are compositions of year-scale tasks. Crossing this year-long capability horizon represents the transition from short-run utility to full role delegation.
+                A <strong>working year</strong> is roughly the largest unit of work handed over as one coherent task (a research project, a product cycle). Careers are just compositions of year-scale tasks. Once AI crosses the year horizon, task length stops being the bottleneck — verification, trust, and deployment take over.
               </p>
             )}
           </div>
@@ -340,7 +340,7 @@ function App() {
                 </span>
                 <h4 className="text-sm font-semibold text-white">The Self-Driving Car Analogy</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  What survives each wave of progress is judgment whose ground truth arrives years later, or taste without rubrics. The residue cannot certify itself.
+                  Like self-driving's last 5% — which consumed a decade after the first 95% arrived on schedule — what survives each wave is exactly what resists cheap verification: judgment graded years later, taste without rubrics. The residue cannot certify itself.
                 </p>
               </div>
 
@@ -350,7 +350,7 @@ function App() {
                 </span>
                 <h4 className="text-sm font-semibold text-white">Economic Share Mapping</h4>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Tracking the fraction of O*NET tasks shifting from augmentation to delegation. This yield a later, economically real curve compared to the frontier.
+                  Tracking the fraction of O*NET tasks shifting from augmentation to delegation. This yields a later, economically real curve than the frontier-capability dates in the table below.
                 </p>
               </div>
             </div>
@@ -384,7 +384,7 @@ function App() {
                 <tr className="bg-slate-900/60 border-b border-slate-850 text-slate-400 font-semibold">
                   <th className="p-4 w-1/4">Stage</th>
                   <th className="p-4 w-1/6">Estimate</th>
-                  <th className="p-4 w-7/12">Key Drivers & Risks</th>
+                  <th className="p-4 w-7/12">Key Drivers &amp; Risks</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-850 bg-slate-950/40">
@@ -392,35 +392,45 @@ function App() {
                   <td className="p-4 font-bold text-white">Verifiable-domain superhumanity</td>
                   <td className="p-4 text-indigo-400 font-bold font-mono">~2027–2029</td>
                   <td className="p-4 text-slate-300 leading-relaxed">
-                    Superhuman at most cheaply-verifiable cognitive work (math, code). Driven by RL on verifiable rewards. Risk: reliability at long task lengths, not peak skill.
+                    {readingMode === 'brief' 
+                      ? 'Math, code, structured analysis — the domains that grade themselves fall first.' 
+                      : 'Superhuman at most cheaply-verifiable cognitive work (math, code). Driven by RL on verifiable rewards. Risk: reliability at long task lengths, not peak skill.'}
                   </td>
                 </tr>
                 <tr className="hover:bg-slate-900/20">
                   <td className="p-4 font-bold text-white">Autonomous AI research threshold</td>
                   <td className="p-4 text-violet-400 font-bold font-mono">Watch by ~2028</td>
                   <td className="p-4 text-slate-300 leading-relaxed">
-                    AI contribution to AI R&D crosses from acceleration (~tens of %) to running the loop. <strong>The pivotal variable.</strong> Race between self-improvement feedback and physical constraints.
+                    {readingMode === 'brief' 
+                      ? 'The pivotal variable: does AI start running its own R&D loop before compute and capital flatten the curve?' 
+                      : 'AI contribution to AI R&D crosses from acceleration (~tens of %) to running the loop. The pivotal variable. Race between self-improvement feedback and physical constraints.'}
                   </td>
                 </tr>
                 <tr className="hover:bg-slate-900/20">
                   <td className="p-4 font-bold text-white">Year-horizon crossing</td>
                   <td className="p-4 text-amber-400 font-bold font-mono">~2029–2032</td>
                   <td className="p-4 text-slate-300 leading-relaxed">
-                    Reliable completion of coherent tasks taking a skilled human ~1 working year. Domain-staggered. Based on 7-month doubling rate.
+                    {readingMode === 'brief' 
+                      ? 'AI reliably completes projects that take a skilled human a full working year.' 
+                      : 'Reliable completion of coherent tasks taking a skilled human ~1 working year. Domain-staggered. Based on 7-month doubling rate.'}
                   </td>
                 </tr>
                 <tr className="hover:bg-slate-900/20">
                   <td className="p-4 font-bold text-white">Most economically relevant cognition</td>
                   <td className="p-4 text-indigo-400 font-bold font-mono">~2029–2031</td>
                   <td className="p-4 text-slate-300 leading-relaxed">
-                    Superhuman on the bulk of economy-weighted tasks. Scientific contributions precede the silence by years. Lag driver: verification-resistant domains and deployment gap.
+                    {readingMode === 'brief' 
+                      ? 'Superhuman on the bulk of everyday economic tasks — most of which are short.' 
+                      : 'Superhuman on the bulk of economy-weighted tasks. Scientific contributions precede the silence by years. Lag driver: verification-resistant domains and deployment gap.'}
                   </td>
                 </tr>
                 <tr className="hover:bg-slate-900/20">
                   <td className="p-4 font-bold text-white">The Silence</td>
                   <td className="p-4 text-amber-400 font-bold font-mono">Mode 2031–2034</td>
-                  <td className="p-4 text-slate-300 leading-relaxed">
-                    No well-funded designer can construct any remaining human-easy/AI-hard task. 10% by 2029; mode 2031-2034 (~55-60%); beyond 2035: ~30%, tailing into the 2040s.
+                  <td className="p-4 text-slate-305 leading-relaxed">
+                    {readingMode === 'brief' 
+                      ? "Nobody, however well funded, can still design a task that's easy for humans and hard for AI. ~30% chance this lands after 2035." 
+                      : 'No well-funded designer can construct any remaining human-easy/AI-hard task. 10% by 2029; mode 2031-2034 (~55-60%); beyond 2035: ~30%, tailing into the 2040s.'}
                   </td>
                 </tr>
               </tbody>
@@ -438,8 +448,7 @@ function App() {
           </div>
 
           <div className="space-y-3">
-            
-            {/* Watch 1 */}
+            {/* Watch item 1 */}
             <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
               <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
                 1
@@ -452,7 +461,7 @@ function App() {
               </div>
             </div>
 
-            {/* Watch 2 */}
+            {/* Watch item 2 */}
             <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
               <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
                 2
@@ -465,7 +474,7 @@ function App() {
               </div>
             </div>
 
-            {/* Watch 3 (ALREADY FIRED) */}
+            {/* Watch item 3 (Fired) */}
             <div className="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4 flex gap-4 items-start relative overflow-hidden">
               <div className="absolute right-0 top-0 bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-bl-xl text-[9px] uppercase tracking-wider font-bold border-l border-b border-indigo-500/10">
                 Fired Indicator
@@ -473,7 +482,7 @@ function App() {
               <div className="h-6 w-6 rounded-full bg-indigo-500/20 flex items-center justify-center shrink-0 mt-0.5 text-indigo-400 border border-indigo-500/30">
                 <CheckCircle size={14} />
               </div>
-              <div className="space-y-1 max-w-[80%]">
+              <div className="space-y-1 max-w-[85%]">
                 <h4 className="font-semibold text-white text-sm flex items-center gap-2">
                   ARC-AGI-3 Trajectory Shape
                 </h4>
@@ -483,63 +492,93 @@ function App() {
               </div>
             </div>
 
-            {/* Watch 4 */}
-            <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
-              <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
-                4
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-semibold text-white text-sm">Successor-Benchmark Design Cost</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Time-to-discriminating-successor after each saturation, and how contrived and complex those successors must become.
-                </p>
-              </div>
-            </div>
+            {readingMode === 'expert' ? (
+              <>
+                {/* Watch item 4 */}
+                <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
+                  <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
+                    4
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-white text-sm">Successor-Benchmark Design Cost</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Time-to-discriminating-successor after each saturation, and how contrived and complex those successors must become.
+                    </p>
+                  </div>
+                </div>
 
-            {/* Watch 5 */}
-            <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
-              <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
-                5
-              </div>
-              <div className="space-y-1">
-                <h4 className="font-semibold text-white text-sm">Delegation Share in Usage Data</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Economy-weighted shift from simple tool augmentation to autonomous delegation, mapped per occupational domain.
-                </p>
-              </div>
-            </div>
+                {/* Watch item 5 */}
+                <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
+                  <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
+                    5
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-white text-sm">Delegation Share in Usage Data</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Economy-weighted shift from simple tool augmentation to autonomous delegation, mapped per occupational domain.
+                    </p>
+                  </div>
+                </div>
 
-            {/* Watch 6 */}
-            <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
-              <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
-                6
+                {/* Watch item 6 */}
+                <div className="bg-slate-900/20 border border-slate-900 rounded-xl p-4 flex gap-4 items-start">
+                  <div className="h-6 w-6 rounded-full bg-slate-950 flex items-center justify-center font-bold text-indigo-400 border border-indigo-500/20 text-xs shrink-0 mt-0.5 font-mono">
+                    6
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-white text-sm">The Capability-Deployment Gap</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed">
+                      Whether enterprise ROI discipline and organizational inertia compress or extend the lag between capability and economic reality.
+                    </p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="text-xs text-slate-500 font-semibold p-4 bg-slate-900/10 border border-slate-900/30 rounded-xl leading-relaxed">
+                Three more indicators — successor-benchmark design cost, delegation share in usage data, and the capability–deployment gap — are in the full synthesis.{' '}
+                <button
+                  onClick={() => handleSetMode('expert')}
+                  className="text-indigo-400 hover:text-indigo-300 font-bold underline cursor-pointer ml-1 inline"
+                >
+                  Read expert mode &rarr;
+                </button>
               </div>
-              <div className="space-y-1">
-                <h4 className="font-semibold text-white text-sm">The Capability-Deployment Gap</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Whether enterprise ROI discipline and organizational inertia compress or extend the lag between capability and economic reality.
-                </p>
-              </div>
-            </div>
-
+            )}
           </div>
         </section>
 
         {/* SOURCES REFERENCED */}
-        <section className="glass-panel p-6 sm:p-8 space-y-4 border-slate-900 text-left text-xs text-slate-400 leading-relaxed">
-          <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-850 pb-2">
-            <FileText size={14} className="text-indigo-400" />
-            Sources & References
-          </h4>
-          <p>
-            <strong>Devresse, A., et al.</strong>, <em>The AI Revolution: 2026 Brief (V2)</em>, April 2026 (seed hypothesis) · <strong>METR</strong>, time-horizons research (metr.org/time-horizons) · <strong>ARC Prize Foundation</strong>: ARC-AGI-3 technical report (March 2026), ARC Prize 2025 results · <strong>Scale AI</strong> SWE-bench Pro leaderboards (standardized public/private) · <strong>llm-stats</strong> vendor-aggregate SWE-bench Pro tracking · <strong>OpenAI</strong> SWE-bench Verified contamination withdrawal (Feb 2026) · <strong>Forrester</strong> (2026 spend postponement data) · <strong>Gartner</strong> (agentic adoption & decision-maker outcome survey) · <strong>Bain</strong> enterprise AI deployment survey · <strong>MIT Project NANDA</strong>, <em>The GenAI Divide</em> (2025) · <strong>SignalFire</strong> State of Talent (2025) · <strong>Stanford Digital Economy Lab</strong> · <strong>Anthropic Economic Index</strong> & O*NET task taxonomy · <strong>Uber</strong> agentic-tool spend caps, 2026 · <strong>Kalai & Nachum</strong>, calibration/bluffing (arXiv:2509.04664) · <strong>Self-driving autonomy</strong> timelines 2016–2026.
-          </p>
-          <div className="bg-slate-950 p-3 rounded-lg border border-slate-900 text-[10px] text-slate-500 leading-normal flex items-start gap-2">
-            <RefreshCw size={12} className="shrink-0 mt-0.5 text-indigo-500" />
-            <span>
-              <strong>Provenance Note:</strong> Figures above reflect verified sources and web-checked on July 10, 2026. Several figures (especially vendor benchmark scores and fast-decaying leaderboards) carry extremely short half-lives and must be re-verified before reuse.
-            </span>
+        <section className="glass-panel p-6 sm:p-8 space-y-4 border-slate-900 text-left text-xs text-slate-400 leading-relaxed overflow-hidden">
+          <div className="flex items-center justify-between border-b border-slate-850 pb-2">
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <FileText size={14} className="text-indigo-400" />
+              Sources &amp; References
+            </h4>
+            <button
+              onClick={() => setSourcesOpen(o => !o)}
+              className="text-[10px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {sourcesOpen ? 'Collapse' : 'Expand Sources'}
+              <ChevronDown
+                size={12}
+                className={`transition-transform duration-200 ${sourcesOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
           </div>
+          
+          {sourcesOpen && (
+            <div className="space-y-4 animate-fadeIn">
+              <p>
+                <strong>Devresse, A., et al.</strong>, <em>The AI Revolution: 2026 Brief (V2)</em>, April 2026 (seed hypothesis) · <strong>METR</strong>, time-horizons research (metr.org/time-horizons) · <strong>ARC Prize Foundation</strong>: ARC-AGI-3 technical report (March 2026), ARC Prize 2025 results · <strong>Scale AI</strong> SWE-bench Pro leaderboards (standardized public/private) · <strong>llm-stats</strong> vendor-aggregate SWE-bench Pro tracking · <strong>OpenAI</strong> SWE-bench Verified contamination withdrawal (Feb 2026) · <strong>Forrester</strong> (2026 spend postponement data) · <strong>Gartner</strong> (agentic adoption & decision-maker outcome survey) · <strong>Bain</strong> enterprise AI deployment survey · <strong>MIT Project NANDA</strong>, <em>The GenAI Divide</em> (2025) · <strong>SignalFire</strong> State of Talent (2025) · <strong>Stanford Digital Economy Lab</strong> · <strong>Anthropic Economic Index</strong> & O*NET task taxonomy · <strong>Uber</strong> agentic-tool spend caps, 2026 · <strong>Kalai & Nachum</strong>, calibration/bluffing (arXiv:2509.04664) · <strong>Self-driving autonomy</strong> timelines 2016–2026.
+              </p>
+              <div className="bg-slate-950 p-3 rounded-lg border border-slate-900 text-[10px] text-slate-500 leading-normal flex items-start gap-2">
+                <RefreshCw size={12} className="shrink-0 mt-0.5 text-indigo-500" />
+                <span>
+                  <strong>Provenance Note:</strong> Figures above reflect verified sources and web-checked on July 10, 2026. Several figures (especially vendor benchmark scores and fast-decaying leaderboards) carry extremely short half-lives and must be re-verified before reuse.
+                </span>
+              </div>
+            </div>
+          )}
         </section>
 
       </main>
