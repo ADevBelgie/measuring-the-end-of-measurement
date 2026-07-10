@@ -117,7 +117,7 @@ const ArcAgiProgress = () => {
 
   const seriesInfo = [
     { id: 'arc1', name: 'ARC-AGI-1 (2020)', description: 'The original abstraction benchmark. Sat near 0% for years, then collapsed in under 12 months once test-time reasoning arrived.' },
-    { id: 'arc2', name: 'ARC-AGI-2 (March 2025)', description: 'Second generation. Harder logic, interactive environments. Gemini 3 Deep Think reached 84.6% within a year.' },
+    { id: 'arc2', name: 'ARC-AGI-2 (March 2025)', description: 'Second generation. Harder static logic puzzles. Gemini 3 Deep Think reached 84.6% within a year.' },
     { id: 'arc3', name: 'ARC-AGI-3 (March 2026)', description: 'Built off the current training path entirely — language-free, scored by RHAE. First verified movement is GPT-5.6 Sol at 7.8% (July 2026).' },
   ];
 

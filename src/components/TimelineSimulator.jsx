@@ -5,10 +5,10 @@ const TimelineSimulator = () => {
   // Simulator inputs
   const [doublingTime, setDoublingTime] = useState(7); // default 7 months
   const [deploymentLag, setDeploymentLag] = useState(2); // default 2 years
-  const [residueOffset, setResidueOffset] = useState(30); // default 30%
+  const [residueOffset, setResidueOffset] = useState(30); // default 30% tail probability
   const [showFormula, setShowFormula] = useState(false);
 
-  // Math helper (rounded to 1 decimal place)
+  // Math helper (rounded to nearest whole year or mid-year)
   const formatYear = (val) => {
     const wholePart = Math.floor(val);
     const fraction = val - wholePart;
@@ -20,24 +20,25 @@ const TimelineSimulator = () => {
   // Base Year: July 2026
   const baseYear = 2026.5;
 
-  // 1. Verifiable-domain superhumanity: ~2027–2029
-  const vStart = baseYear + (doublingTime / 12) * 1.5;
-  const vEnd = baseYear + (doublingTime / 12) * 4.5;
+  // 1. Verifiable-domain superhumanity: ~2027–2029 (pure frontier capability)
+  const vStart = baseYear + (doublingTime / 12) * 1.0;
+  const vEnd = baseYear + (doublingTime / 12) * 4.28;
 
-  // 2. Autonomous AI research threshold: Watch by ~2028
-  const autoResearch = baseYear + (doublingTime / 12) * 2.5;
+  // 2. Autonomous AI research threshold: Watch by ~2028 (pure frontier capability)
+  const autoResearch = baseYear + (doublingTime / 12) * 2.57;
 
-  // 3. Year-horizon crossing: ~2029–2032
-  const yStart = baseYear + (doublingTime / 12) * 5;
-  const yEnd = baseYear + (doublingTime / 12) * 9;
+  // 3. Year-horizon crossing: ~2029–2032 (pure frontier capability)
+  const yStart = baseYear + (doublingTime / 12) * 4.28;
+  const yEnd = baseYear + (doublingTime / 12) * 9.43;
 
-  // 4. Most economically relevant cognition: ~2029–2031
-  const econStart = baseYear + (doublingTime / 12) * 3.5 + deploymentLag * 0.5;
-  const econEnd = baseYear + (doublingTime / 12) * 5.5 + deploymentLag * 0.75;
+  // 4. Most economically relevant cognition: ~2029–2031 (pure frontier capability)
+  const econStart = baseYear + (doublingTime / 12) * 4.28;
+  const econEnd = baseYear + (doublingTime / 12) * 7.71;
 
-  // 5. The silence: Mode 2031–2034 (~55-60%), 30% beyond 2035
-  const silenceStart = baseYear + (doublingTime / 12) * 8 + deploymentLag + (residueOffset - 30) / 10 - 2;
-  const silenceEnd = baseYear + (doublingTime / 12) * 8 + deploymentLag + (residueOffset - 30) / 10 + 1;
+  // 5. The silence: Mode 2031–2034 (pure frontier capability)
+  const silenceStart = baseYear + (doublingTime / 12) * 7.71 + (residueOffset - 30) / 10;
+  const silenceEnd = baseYear + (doublingTime / 12) * 12.85 + (residueOffset - 30) / 10;
+
   const tailProbability = residueOffset;
   const tailEndDecade = residueOffset >= 40 ? '2040s' : residueOffset >= 25 ? 'mid-2030s to 2040' : 'late 2030s';
 
@@ -45,36 +46,46 @@ const TimelineSimulator = () => {
     {
       name: 'Verifiable-domain superhumanity',
       desc: 'Superhuman at most cheaply-verifiable cognitive work (math, code, structured analysis) at economically relevant reliability.',
-      calculated: `~${formatYear(vStart)}–${formatYear(vEnd)}`,
+      calculatedFrontier: `~${formatYear(vStart)}–${formatYear(vEnd)}`,
+      calculatedDeployed: `~${formatYear(vStart + deploymentLag)}–${formatYear(vEnd + deploymentLag)}`,
       original: '~2027–2029',
+      originalDeployed: '~2029–2031',
       driver: 'Driven by RL on verifiable rewards (e.g., math and coding domains).'
     },
     {
       name: 'Autonomous AI research threshold',
       desc: 'AI contribution to AI R&D crosses from acceleration (~tens of %) to running the autonomous self-improvement loop.',
-      calculated: `Watch by ~${formatYear(autoResearch)}`,
+      calculatedFrontier: `Watch by ~${formatYear(autoResearch)}`,
+      calculatedDeployed: `Watch by ~${formatYear(autoResearch + deploymentLag)}`,
       original: 'Watch by ~2028',
+      originalDeployed: 'Watch by ~2030',
       driver: 'The critical inflection point where capability scaling enters a recursive feedback loop.'
     },
     {
       name: 'Year-horizon crossing',
       desc: 'Reliable completion of coherent tasks taking a skilled human ~1 working year (verifiable domains first).',
-      calculated: `~${formatYear(yStart)}–${formatYear(yEnd)}`,
+      calculatedFrontier: `~${formatYear(yStart)}–${formatYear(yEnd)}`,
+      calculatedDeployed: `~${formatYear(yStart + deploymentLag)}–${formatYear(yEnd + deploymentLag)}`,
       original: '~2029–2032',
+      originalDeployed: '~2031–2034',
       driver: 'Requires multi-step planning and error mitigation over long context spans.'
     },
     {
       name: 'Most economically relevant cognition',
       desc: 'Superhuman on the bulk of economy-weighted cognitive tasks, including significant scientific contribution.',
-      calculated: `~${formatYear(econStart)}–${formatYear(econEnd)}`,
+      calculatedFrontier: `~${formatYear(econStart)}–${formatYear(econEnd)}`,
+      calculatedDeployed: `~${formatYear(econStart + deploymentLag)}–${formatYear(econEnd + deploymentLag)}`,
       original: '~2029–2031',
+      originalDeployed: '~2031–2033',
       driver: 'Staggered by deployment lag, corporate adoption speed, and verification-resistant remainder tasks.'
     },
     {
       name: 'The silence (existential boundary)',
       desc: 'No well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard task.',
-      calculated: `Mode ~${formatYear(silenceStart)}–${formatYear(silenceEnd)} (${tailProbability}% tail beyond 2035, tailing into the ${tailEndDecade})`,
-      original: 'Mode 2031–2034 (30% beyond 2035, tail into the 2040s)',
+      calculatedFrontier: `Mode ~${formatYear(silenceStart)}–${formatYear(silenceEnd)} (${tailProbability}% tail beyond 2035, tailing into the ${tailEndDecade})`,
+      calculatedDeployed: `Mode ~${formatYear(silenceStart + deploymentLag)}–${formatYear(silenceEnd + deploymentLag)} (${tailProbability}% tail beyond 2035, tailing into the ${tailEndDecade})`,
+      original: 'Mode 2031–2034',
+      originalDeployed: 'Mode 2033–2036',
       driver: 'Terminal condition: bounty for any discriminating task goes unclaimed.'
     }
   ];
@@ -142,7 +153,7 @@ const TimelineSimulator = () => {
               <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
                 <HelpCircle size={12} />
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
-                  How many years it takes for frontier capability to translate into corporate deployment.
+                  How many years it takes for frontier capability to translate into corporate deployment at scale across the economy.
                 </span>
               </span>
             </span>
@@ -170,11 +181,11 @@ const TimelineSimulator = () => {
         <div className="space-y-3">
           <div className="flex justify-between text-xs">
             <span className="font-semibold text-slate-300 flex items-center gap-1">
-              Residue Prior (Tail Offset)
+              Tail Probability beyond 2035
               <span className="group relative cursor-pointer text-slate-500 hover:text-slate-300">
                 <HelpCircle size={12} />
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 border border-slate-800 text-[10px] text-slate-400 p-2 rounded shadow-xl hidden group-hover:block pointer-events-none leading-relaxed z-10">
-                  Estimated size of the adversely-selected, verification-resistant remainder (similar to self-driving's last 5%).
+                  Estimated probability that the terminal "Silence" boundary is not reached by 2035 (reflecting tail risk of verification-resistant remnants).
                 </span>
               </span>
             </span>
@@ -207,30 +218,34 @@ const TimelineSimulator = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-300 leading-relaxed">
             <div className="space-y-1.5">
               <div>
-                <span className="text-indigo-400">Verifiable-domain superhumanity:</span><br />
-                <code>Start = 2026.5 + (DT / 12) * 1.5</code><br />
-                <code>End = 2026.5 + (DT / 12) * 4.5</code>
+                <span className="text-indigo-400">Verifiable-domain superhumanity (Frontier):</span><br />
+                <code>Start = 2026.5 + (DT / 12) * 1.0</code><br />
+                <code>End = 2026.5 + (DT / 12) * 4.28</code>
               </div>
               <div>
-                <span className="text-violet-400">Autonomous AI R&D Threshold:</span><br />
-                <code>Target = 2026.5 + (DT / 12) * 2.5</code>
+                <span className="text-violet-400">Autonomous AI R&D Threshold (Frontier):</span><br />
+                <code>Target = 2026.5 + (DT / 12) * 2.57</code>
+              </div>
+              <div>
+                <span className="text-slate-400">Deployed Economic Reality:</span><br />
+                <code>Deployed Date = Frontier Date + Deployment Lag</code>
               </div>
             </div>
             <div className="space-y-1.5">
               <div>
-                <span className="text-amber-400">Year-horizon crossing:</span><br />
-                <code>Start = 2026.5 + (DT / 12) * 5</code><br />
-                <code>End = 2026.5 + (DT / 12) * 9</code>
+                <span className="text-amber-400">Year-horizon crossing (Frontier):</span><br />
+                <code>Start = 2026.5 + (DT / 12) * 4.28</code><br />
+                <code>End = 2026.5 + (DT / 12) * 9.43</code>
               </div>
               <div>
-                <span className="text-indigo-300">The Silence (Mode):</span><br />
-                <code>Start = 2026.5 + (DT / 12) * 8 + Lag + (Residue - 30)/10 - 2</code><br />
-                <code>End = 2026.5 + (DT / 12) * 8 + Lag + (Residue - 30)/10 + 1</code>
+                <span className="text-indigo-300">The Silence (Frontier Mode):</span><br />
+                <code>Start = 2026.5 + (DT / 12) * 7.71 + (Residue - 30)/10</code><br />
+                <code>End = 2026.5 + (DT / 12) * 12.85 + (Residue - 30)/10</code>
               </div>
             </div>
           </div>
           <div className="text-[10px] text-slate-400 border-t border-indigo-900/20 pt-2 leading-relaxed">
-            <strong>Regression Test Validation:</strong> At default parameters (DT = 7, Lag = 2, Residue = 30), formulas yield dates identical to the brief's central estimate table (Verifiable: ~2028–2029; R&D threshold: ~2028; Year-crossing: ~2029–2032; Economy: ~2029–2031; Silence: Mode 2031–2034 with 30% tail).
+            <strong>Regression Test Validation:</strong> At default parameters (METR Doubling Time = 7 months, Tail Probability = 30%), the formulas yield dates identical to the brief's central estimate table of frontier capabilities (Verifiable: ~2027–2029; R&D threshold: ~2028; Year-crossing: ~2029–2032; Economy: ~2029–2031; Silence: Mode ~2031–2034).
           </div>
         </div>
       )}
@@ -239,7 +254,7 @@ const TimelineSimulator = () => {
       <div className="space-y-4">
         {stages.map((stage, idx) => {
           // Check if calculations deviate from the defaults
-          const isShifted = doublingTime !== 7 || deploymentLag !== 2 || residueOffset !== 30;
+          const isShifted = doublingTime !== 7 || residueOffset !== 30 || deploymentLag !== 2;
           return (
             <div 
               key={idx} 
@@ -250,19 +265,31 @@ const TimelineSimulator = () => {
                 <p className="text-xs text-slate-400 leading-relaxed">{stage.desc}</p>
                 <div className="text-[10px] text-slate-500 font-semibold">{stage.driver}</div>
               </div>
-              <div className="border-t border-slate-900 pt-3 flex flex-row flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              
+              {/* Split Estimates: Frontier Capability vs Deployed Economic Reality */}
+              <div className="border-t border-slate-900 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-0.5">Recalculated Estimate</div>
-                  <div className="text-base font-black text-indigo-400 font-mono leading-snug">
-                    {stage.calculated}
+                  <div className="text-[10px] uppercase tracking-wider text-indigo-400 font-bold mb-0.5">Frontier Capability</div>
+                  <div className="text-base font-black text-indigo-300 font-mono leading-snug">
+                    {stage.calculatedFrontier}
                   </div>
+                  {isShifted && (
+                    <div className="text-[9px] text-slate-500 font-mono mt-0.5">
+                      Baseline: {stage.original}
+                    </div>
+                  )}
                 </div>
-                {isShifted && (
-                  <div>
-                    <span className="text-[8px] uppercase tracking-wider text-slate-600 block">Baseline Estimate</span>
-                    <span className="text-[11px] font-mono text-slate-500 line-through">{stage.original}</span>
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-violet-400 font-bold mb-0.5">Deployed Economic Reality</div>
+                  <div className="text-base font-black text-violet-300 font-mono leading-snug">
+                    {stage.calculatedDeployed}
                   </div>
-                )}
+                  {isShifted && (
+                    <div className="text-[9px] text-slate-500 font-mono mt-0.5">
+                      Baseline (+2y): {stage.originalDeployed}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );

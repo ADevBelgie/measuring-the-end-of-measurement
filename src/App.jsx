@@ -17,6 +17,9 @@ function App() {
   const [readingMode, setReadingMode] = useState(getInitialMode);
   const [disclosureOpen, setDisclosureOpen] = useState(false);
 
+  // Compute days since publication (July 10, 2026)
+  const daysOld = Math.max(0, Math.floor((Date.now() - new Date('2026-07-10T00:00:00')) / 86400000));
+
   // Sync reading mode to/from URL hash so links can be shared
   useEffect(() => {
     const onHashChange = () => {
@@ -34,6 +37,22 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-300">
+      
+      {/* ─── DYNAMIC DECAYING DATE BANNER ─── */}
+      <div className={`w-full py-2.5 px-4 text-xs font-semibold text-center border-b flex justify-center items-center gap-2 select-none transition-colors duration-500 ${
+        daysOld < 60
+          ? 'bg-emerald-950/60 border-emerald-800/40 text-emerald-300'
+          : daysOld < 120
+            ? 'bg-amber-950/60 border-amber-800/40 text-amber-300'
+            : 'bg-rose-950/70 border-rose-800/50 text-rose-300 animate-pulse'
+      }`}>
+        <span>
+          Data as of July 10, 2026 ({daysOld} days elapsed). 
+          {daysOld < 60 && ' ⏱️ Baseline signal remains valid.'}
+          {daysOld >= 60 && daysOld < 120 && ' ⚠️ Alert: Benchmark half-life decay has begun.'}
+          {daysOld >= 120 && ' 🚨 Warning: Half-life saturated. High signal rot risk! Re-verify sources.'}
+        </span>
+      </div>
 
       {/* ─── STICKY HEADER ─── */}
       <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-50 transition-colors">
@@ -128,26 +147,33 @@ function App() {
           </div>
 
           {/* Disclosure and Status Panel (MUST persist in both modes) */}
-          <div className="bg-slate-900/40 border border-slate-850 rounded-2xl text-xs text-slate-400 leading-relaxed text-left overflow-hidden">
-            <button
-              onClick={() => setDisclosureOpen(o => !o)}
-              className="w-full flex items-center justify-between gap-2 p-4 sm:p-5 hover:bg-slate-900/30 transition-colors"
-            >
+          <div className="bg-slate-900/40 border border-slate-850 rounded-2xl text-xs text-slate-400 leading-relaxed text-left p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between border-b border-slate-850 pb-2.5">
               <span className="font-bold text-white uppercase tracking-wider text-[10px] flex items-center gap-1.5">
                 <ShieldAlert size={14} className="text-indigo-400" />
                 Authorship Disclosure &amp; Status Note
               </span>
-              <ChevronDown
-                size={15}
-                className={`text-slate-500 transition-transform duration-200 ${disclosureOpen ? 'rotate-180' : ''}`}
-              />
-            </button>
+              <button
+                onClick={() => setDisclosureOpen(o => !o)}
+                className="text-[10px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                {disclosureOpen ? 'Show Less' : 'Show Full Details'}
+                <ChevronDown
+                  size={12}
+                  className={`transition-transform duration-200 ${disclosureOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+            </div>
+            <p>
+              <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 brief that supplied this document's seed hypothesis (the benchmark half-life).
+              {!disclosureOpen && '...'}
+            </p>
             {disclosureOpen && (
-              <div className="px-4 sm:px-5 pb-4 sm:pb-5 space-y-3 border-t border-slate-850 pt-3">
+              <div className="space-y-3 animate-fadeIn">
                 <p>
-                  <strong>Disclosure:</strong> A participant in this synthesis is Arthur Devresse, co-author of the April 2026 brief that supplied this document's seed hypothesis (the benchmark half-life). Citations of that brief are therefore self-citation; the mid-2026 verification of its claims was performed against independent sources (Scale AI, ARC Prize Foundation, Forrester, Gartner, Stanford, and others) and does not route through the brief or its authors.
+                  Citations of that brief are therefore self-citation; the mid-2026 verification of its claims was performed against independent sources (Scale AI, ARC Prize Foundation, Forrester, Gartner, Stanford, and others) and does not route through the brief or its authors.
                 </p>
-                <p className="italic">
+                <p className="italic border-t border-slate-850 pt-2.5">
                   <strong>Status:</strong> Informal synthesis. Point estimates are held loosely and are most useful as a structure for updating, not as forecasts to be quoted. Prose is deliberately compressed; if this document is ever promoted beyond informal synthesis, unpacking is the first job.
                 </p>
               </div>
@@ -205,7 +231,7 @@ function App() {
                   <strong>First, benchmarks die fast.</strong> The April 2026 strategic brief proposed an ~8-month benchmark half-life; events since suggest that was conservative. SWE-bench Verified was effectively retired after OpenAI's February 2026 contamination withdrawal. Its successor, SWE-bench Pro, saw its standardized top score move from ~46% (April 2026) to ~59% (Scale standardized public set, July 2026) in roughly ten weeks — while simultaneously fragmenting into three competing "official" numbers, indicating a decay of <em>signal</em> as much as of difficulty.
                 </p>
                 <p>
-                  <strong>Second, the decay is punctuated.</strong> ARC-AGI-1 sat near zero from 2020 through 2023, then collapsed when test-time reasoning (o1/o3) arrived. ARC-AGI-2 went from ~2.5% to ~68.8% in under two years once reasoning models matured. ARC-AGI-3, launched March 2026 with frontier systems below 1% against a 100% human solve rate, is built off the current training paradigm's path entirely — interactive, language-free, scored by squared action-efficiency (RHAE) against human baselines.
+                  <strong>Second, the decay is punctuated.</strong> ARC-AGI-1 sat near zero from 2020 through 2023, then collapsed when test-time reasoning (o1/o3) arrived. ARC-AGI-2 went from ~2.5% to ~84.6% (Gemini 3 Deep Think) in under a year once reasoning models matured. ARC-AGI-3, launched March 2026 with frontier systems below 1% against a 100% human solve rate, is built off the current training paradigm's path entirely — interactive, language-free, scored by squared action-efficiency (RHAE) against human baselines.
                 </p>
               </>
             ) : (
