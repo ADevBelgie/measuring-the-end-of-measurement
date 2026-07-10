@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.03) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    @apply bg-violet-500/30 text-white;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-950;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-800 rounded-full border border-transparent hover:bg-slate-700 transition-colors;
+}
+
+/* Animations */
+@keyframes glow-pulse-indigo {
+  0%, 100% {
+    box-shadow: 0 0 15px 1px rgba(99, 102, 241, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px 3px rgba(99, 102, 241, 0.3);
+  }
+}
+
+@keyframes glow-pulse-amber {
+  0%, 100% {
+    box-shadow: 0 0 15px 1px rgba(245, 158, 11, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px 3px rgba(245, 158, 11, 0.3);
+  }
+}
+
+.glow-indigo {
+  animation: glow-pulse-indigo 6s infinite ease-in-out;
+}
+
+.glow-amber {
+  animation: glow-pulse-amber 6s infinite ease-in-out;
+}
+
+/* Glassmorphism styling */
+.glass-panel {
+  @apply bg-slate-900/60 border border-slate-800/80 backdrop-blur-md rounded-2xl shadow-xl shadow-slate-950/20;
+}
+
+.glass-panel-interactive {
+  @apply glass-panel transition-all duration-300 hover:border-slate-700/80 hover:bg-slate-900/80 hover:-translate-y-0.5;
+}
+
+/* Gradient text */
+.gradient-text-indigo {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-500;
+}
+
+.gradient-text-amber {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-orange-400 to-red-400;
+}
+
+.gradient-text-rainbow {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-violet-400 to-amber-400;
+}
+
+/* Custom transitions */
+.reading-mode-transition {
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+
+/* Markdown styling inside content */
+.prose-custom p {
+  @apply text-slate-300 leading-relaxed mb-4 text-base md:text-lg font-light;
+}
+.prose-custom p strong {
+  @apply font-semibold text-white;
+}
+.prose-custom blockquote {
+  @apply pl-4 border-l-2 border-indigo-500/50 text-slate-400 italic my-6 bg-indigo-500/5 py-2 pr-4 rounded-r-md;
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+}
