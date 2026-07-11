@@ -291,6 +291,9 @@ function App() {
                     <li>The surviving gaps are systematically selected: a bounty claim must be adjudicable, and the residue is selected <em>for</em> verification resistance (§3) — so the silence runs early relative to true supersession, and how early depends on whether conversion outpaces selection (watch item 4).</li>
                     <li>Observability confound: benchmark creation can cease for funding, attention, or liability reasons rather than capability.</li>
                   </ul>
+                  <p className="pt-1.5 border-t border-line/10 text-ink-dim leading-relaxed font-sans">
+                    All identified failure modes push the silence early, none late — the criterion's errors are one-signed, which is what makes it usable as a leading indicator.
+                  </p>
                 </div>
               </>
             ) : (
@@ -464,10 +467,10 @@ function App() {
                   <td className="p-4 text-signal font-bold font-mono">Mode 2031–2034</td>
                   <td className="p-4 text-ink-dim leading-relaxed">
                     {readingMode === 'brief' 
-                      ? "The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at frozen reference-human cost) task. ~30% chance this lands after 2035." 
+                      ? "The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline, drift-corrected) / AI-hard (at frozen reference-human cost) task. ~30% chance this lands after 2035." 
                       : (
                         <div className="space-y-1.5">
-                          <p><strong>Criterion:</strong> The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at frozen reference-human cost) task.</p>
+                          <p><strong>Criterion:</strong> The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline, drift-corrected) / AI-hard (at frozen reference-human cost) task.</p>
                           <p><strong>Drivers:</strong> Trailing edge by construction — though a <em>leading</em> indicator of true supersession, biased early by §1's selection limit. 10% by 2029; mode 2031–2034 (~55–60%); beyond 2035: ~30%, tailing into the 2040s. The disanalogies from self-driving's last-5% decade (§3) offset the reference class partially, not fully; the ~30% beyond 2035 is its residual claim after those offsets. Neighboring classes bracket it: the chess-centaur collapse argues faster, radiology argues slower (§3).</p>
                         </div>
                       )}
@@ -498,7 +501,7 @@ function App() {
                 <p className="text-xs text-ink-dim leading-relaxed">
                   {readingMode === 'brief' 
                     ? "Autonomous-research threshold vs. capex/compute flattening. Not directly observable; the primary proxy is an inflection in the METR curve itself."
-                    : "Autonomous-research threshold vs. capex/compute flattening. Resolves more uncertainty than any individual benchmark score. Unlike every other item here, this criterion is not directly observable — labs don't publish their internal automation fraction. Proxies are a basket, none reliable alone: an inflection in the METR doubling time itself (§2 argues the curve already internalizes the feedback, so the loop closing surfaces there first), algorithmic-efficiency estimates, lab disclosure language, and the share of model-generated research output. Hiring patterns are confounded — labs freeze hiring for capex reasons too — so watch for co-movement, not any single line."}
+                    : "Autonomous-research threshold vs. capex/compute flattening. Resolves more uncertainty than any individual benchmark score. Unlike every other item here, this criterion is not directly observable — labs don't publish their internal automation fraction. Proxies are a basket, none reliable alone: an inflection in the METR doubling time itself (§2 argues the curve already internalizes the feedback, so the loop closing surfaces there first), algorithmic-efficiency estimates, lab disclosure language, and the share of model-generated research output. Hiring patterns are confounded — labs freeze hiring for capex reasons too — so watch for co-movement, not any single line. One consequence of the primary proxy: the top two items here partially share an observable — item 2's level answers the horizon question; its second derivative answers this one."}
                 </p>
               </div>
             </div>
@@ -588,7 +591,7 @@ function App() {
                       Pre-AI Expert Baselines
                     </h4>
                     <p className="text-xs text-ink-dim leading-relaxed">
-                      The reference population defining "human-easy" cannot be reconstructed after deskilling. Archiving broad expert baselines — task performances with time-and-reliability profiles, not just scores — is the one item here that is an action, not an observation, and the only one with a closing window. Alongside performance baselines, archive the task-design corpus: a diverse record of how pre-AI humans constructed discriminating tasks is the natural hedge against the stylistic-convergence risk flagged in §1, and it deskills on the same schedule.
+                      The reference population defining "human-easy" cannot be reconstructed after deskilling. Archiving broad expert baselines — task performances with time-and-reliability profiles, not just scores — is the one item here that is an action, not an observation, and the only one with a closing window. Alongside performance baselines, archive the task-design corpus: a diverse record of how pre-AI humans constructed discriminating tasks is the natural hedge against the stylistic-convergence risk flagged in §1, and it deskills on the same schedule. The archive's second job (§1) imposes a further requirement: tasks must remain *re-administrable* — held out and uncontaminated — because the drift meter works by re-running contemporary experts on them. Contamination kills it on two surfaces: leakage into training corpora invalidates the AI-side comparison, and circulation among humans turns the re-test into a memory measure — the SWE-bench Verified failure mode (§1) applied to the instrument meant to outlive it. Read properly, the drift meter is itself a watch signal: per-domain deskilling rate is §1's "gap closing from both sides" made measurable.
                     </p>
                   </div>
                 </div>
