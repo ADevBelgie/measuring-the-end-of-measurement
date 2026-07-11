@@ -282,7 +282,7 @@ function App() {
                   <strong>Implication.</strong> Half-life is too noisy and selection-biased to extrapolate directly. But reframed as a meta-metric — is the half-life staying constant as benchmark territory gets progressively more exotic? how long does it take to build a successor that still discriminates? — it carries information no individual score does.
                 </p>
                 <p>
-                  The terminal condition follows: <strong>the criterion for supersession is the failure of benchmark creation itself</strong> — a standing, well-funded bounty for constructing any discriminating human-easy/AI-hard task — 'hard for AI' pinned to a resource bound (unsolved at the reference human's cost) — with the silence declared when the bounty goes unclaimed. This makes the silence a cost-relative, moving target; ARC-AGI-3's efficiency scoring already concedes the point.
+                  The terminal condition follows: <strong>the criterion for supersession is the failure of benchmark creation itself</strong> — a standing, well-funded bounty for constructing any discriminating human-easy/AI-hard task — 'hard for AI' pinned to a resource bound (unsolved at the pre-transition reference human's cost, inflation-adjusted — only the human side of the comparison freezes; the AI side's falling cost is the phenomenon under measurement, not contamination) — with the silence declared when the bounty goes unclaimed. This makes the silence a cost-relative, moving target; ARC-AGI-3's efficiency scoring already concedes the point.
                 </p>
                 <div className="border-l-2 border-line/40 pl-4 py-1.5 bg-panel text-ink-dim rounded-r-md space-y-2 text-xs">
                   <span className="font-bold text-ink block">Three honest limits of the silence criterion:</span>
@@ -438,7 +438,7 @@ function App() {
                   <td className="p-4 text-ink-dim leading-relaxed">
                     {readingMode === 'brief' 
                       ? 'The pivotal variable: does AI start running its own R&D loop before compute and capital flatten the curve?' 
-                      : 'AI contribution to AI R&D crosses from acceleration (~tens of %) to running the loop. The pivotal variable. Race between self-improvement feedback and physical constraints.'}
+                      : 'AI contribution to AI R&D crosses from acceleration (~tens of %) to running the loop. The pivotal variable. Race between self-improvement feedback and physical constraints. Not directly observable from outside — see §5, item 1, for the proxy basket.'}
                   </td>
                 </tr>
                 <tr className="hover:bg-raised/50">
@@ -464,10 +464,10 @@ function App() {
                   <td className="p-4 text-signal font-bold font-mono">Mode 2031–2034</td>
                   <td className="p-4 text-ink-dim leading-relaxed">
                     {readingMode === 'brief' 
-                      ? "The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at reference-human cost) task. ~30% chance this lands after 2035." 
+                      ? "The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at frozen reference-human cost) task. ~30% chance this lands after 2035." 
                       : (
                         <div className="space-y-1.5">
-                          <p><strong>Criterion:</strong> The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at reference-human cost) task.</p>
+                          <p><strong>Criterion:</strong> The cost-bounded bounty of §1 goes unclaimed: no well-funded designer can construct any remaining human-easy (pre-AI baseline) / AI-hard (at frozen reference-human cost) task.</p>
                           <p><strong>Drivers:</strong> Trailing edge by construction — though a <em>leading</em> indicator of true supersession, biased early by §1's selection limit. 10% by 2029; mode 2031–2034 (~55–60%); beyond 2035: ~30%, tailing into the 2040s. The disanalogies from self-driving's last-5% decade (§3) offset the reference class partially, not fully; the ~30% beyond 2035 is its residual claim after those offsets. Neighboring classes bracket it: the chess-centaur collapse argues faster, radiology argues slower (§3).</p>
                         </div>
                       )}
@@ -496,7 +496,9 @@ function App() {
               <div className="space-y-1">
                 <h4 className="font-semibold text-ink text-sm">The 2028 Race</h4>
                 <p className="text-xs text-ink-dim leading-relaxed">
-                  Autonomous-research threshold vs. capex/compute flattening. Resolves more uncertainty than any individual benchmark score.
+                  {readingMode === 'brief' 
+                    ? "Autonomous-research threshold vs. capex/compute flattening. Not directly observable; the primary proxy is an inflection in the METR curve itself."
+                    : "Autonomous-research threshold vs. capex/compute flattening. Resolves more uncertainty than any individual benchmark score. Unlike every other item here, this criterion is not directly observable — labs don't publish their internal automation fraction. Proxies are a basket, none reliable alone: an inflection in the METR doubling time itself (§2 argues the curve already internalizes the feedback, so the loop closing surfaces there first), algorithmic-efficiency estimates, lab disclosure language, and the share of model-generated research output. Hiring patterns are confounded — labs freeze hiring for capex reasons too — so watch for co-movement, not any single line."}
                 </p>
               </div>
             </div>
@@ -542,7 +544,7 @@ function App() {
                   <div className="space-y-1">
                     <h4 className="font-semibold text-ink text-sm">Successor-Benchmark Design Cost</h4>
                     <p className="text-xs text-ink-dim leading-relaxed">
-                      Time-to-discriminating-successor after each saturation, and how contrived and complex those successors must become. Also the observable face of §1's conversion-vs-selection race: falling design cost in verification-resistant territory means conversion is winning; rising contrivance with stable residue means selection is.
+                      Time-to-discriminating-successor after each saturation, and how contrived and complex those successors must become. This is also the observable face of §1's conversion-vs-selection race — with one conditioning requirement: the signal counts only when successors aim at residue territory. Falling design cost for tasks targeting verification-resistant domains means conversion is winning; falling cost because designers retreat to already-verifiable ground means the opposite — and that retreat is itself a further way the silence could arrive spuriously early.
                     </p>
                   </div>
                 </div>
@@ -586,7 +588,7 @@ function App() {
                       Pre-AI Expert Baselines
                     </h4>
                     <p className="text-xs text-ink-dim leading-relaxed">
-                      The reference population defining "human-easy" cannot be reconstructed after deskilling. Archiving broad expert baselines — task performances with time-and-reliability profiles, not just scores — is the one item here that is an action, not an observation, and the only one with a closing window.
+                      The reference population defining "human-easy" cannot be reconstructed after deskilling. Archiving broad expert baselines — task performances with time-and-reliability profiles, not just scores — is the one item here that is an action, not an observation, and the only one with a closing window. Alongside performance baselines, archive the task-design corpus: a diverse record of how pre-AI humans constructed discriminating tasks is the natural hedge against the stylistic-convergence risk flagged in §1, and it deskills on the same schedule.
                     </p>
                   </div>
                 </div>
