@@ -323,7 +323,7 @@ function App() {
             {readingMode === 'expert' ? (
               <>
                 <p>
-                  Two properties make this trend load-bearing: it converts benchmark churn into a comparable quantity, and it internalizes recursive self-improvement. Three properties limit it: it is built almost entirely on software-shaped tasks, it is threshold-relative (horizons at 80% reliability run several times shorter, as noted above), and it is a single-source trend.
+                  Two properties make this trend load-bearing: it converts benchmark churn into a comparable quantity, and it internalizes recursive self-improvement. Four properties limit it: it is built almost entirely on software-shaped tasks, it is threshold-relative (horizons at 80% reliability run several times shorter, as noted above), it is a single-source trend, and it measures capability, not deployment.
                 </p>
                 <p>
                   <strong>Why "one working year" is the chosen threshold:</strong> A working year is approximately the largest unit of work delegated as a single coherent task with defined success criteria (a research project, product cycle, or dissertation chapter). Longer spans are compositions of year-scale tasks. Crossing the year-horizon is roughly where task length stops being the binding constraint and verification, trust, and deployment take over.
@@ -527,7 +527,7 @@ function App() {
                   ARC-AGI-3 Trajectory Shape
                 </h4>
                 <p className="text-xs text-ink-dim leading-relaxed">
-                  Verified movement from 0.37% (March 24, 2026 launch) to <strong>7.8% verified</strong> (July 9, 2026, GPT-5.6 Sol). This early movement argues against immediate plateau persistence, with the compute-budget dispute (§1, footnote 1) still open. Next markers: whether the trajectory continues toward the 30–50% EOY range, whether progress comes from within-paradigm scaling or a nameable new ingredient, and whether verified runs land within the official resource cap.
+                  Verified movement from 0.37% (March 24, 2026 launch) to <strong>7.8% verified</strong> (July 9, 2026, GPT-5.6 Sol). This early movement argues against immediate plateau persistence, with the compute-budget dispute (§1) still open. Next markers: whether the trajectory continues toward the 30–50% EOY range, whether progress comes from within-paradigm scaling or a nameable new ingredient, and whether verified runs land within the official resource cap.
                 </p>
               </div>
             </div>
