@@ -128,7 +128,7 @@ const TimelineSimulator = () => {
               >
                 <HelpCircle size={12} />
                 <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-panel border border-line/30 text-[10px] text-ink-dim p-2 rounded shadow-xl hidden group-hover:block group-focus-within:block pointer-events-none leading-relaxed z-10 font-normal">
-                  How many months it takes for the duration of solvable expert-human tasks to double.
+                  How many months it takes for the duration of solvable expert-human tasks to double. Horizons here use METR's 50%-success threshold; 80%-reliability horizons run shorter, so these dates are the early edge of the reliability family.
                 </span>
               </button>
             </span>
@@ -266,6 +266,9 @@ const TimelineSimulator = () => {
             </p>
             <p>
               Tail probability is modeled as a crude linear mode shift of &plusmn;1.5 years around the 30% baseline; the underlying distribution is not reshaped.
+            </p>
+            <p>
+              All horizon-derived dates track the 50%-success curve (§2); no reliability-threshold parameter is modeled.
             </p>
           </div>
         </div>
